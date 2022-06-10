@@ -26,6 +26,7 @@ addr_isr:
 	.equ	WALL_MASK,			0x02
 	.equ	RAKET_MASK,			0x01
 
+
 	.text
  
 main:
@@ -60,18 +61,12 @@ start_game:
 	bl move_ball
 	
 loop_game:
-	ldr r0, timer_1s_adrr
-	bl timer_elapsed
-	cmp r0, valor_de_um_segundo //20
-	bhs one_second_pass
-	
-	
 	bl led_new_point_handler
-
 
 	ldr r0, timer_level_adrr
 	bl timer_elapsed
-	cmp r0, valor_do_tempo_por_transição_level
+	mov r1, valor_do_tempo_por_transicao_level
+	cmp r0, r1
 	bhs move_ball
 	
 	bl check_position
@@ -85,17 +80,16 @@ loop_game:
 
 led_new_point_handler:
 	push lr
-	ldr r0, led_new_point_state_addr
-	cmp r0, LED_OFF
-	bzs	exit_led_new_point_handler
-	
-	ldr r0, timer_1s_adrr
+	mov	r1, valor_de_um_segundo
+	lsr r2, r1, #2	//avoid using another var for valor_de_um_.250seg by doing 1s/4=.250s
 	bl timer_elapsed
-	mov r1, #5	
-	cmp r0, r1	
+
+	//if higher than .25s turn led_off
+	cmp r0, r2
 	bhs led_new_point_off
-	
-exit_led_new_point_handler:	
+	//if higher than 1s  turn led_on
+	cmp r0, r1
+	bhs led_new_point_on
 	pop pc
 	
 	
@@ -103,14 +97,13 @@ one_second_pass:
 	push lr	
 	
 	
+	bl init_timer_1s	//restart timer
 	
-	bl init_timer_1s	
 	
 	bl led_new_point_on	
 	
 	pop lr
-	
-	
+
 	
 led_new_point_on:
 	push lr
@@ -145,9 +138,9 @@ time_level_passed:
 
 	.equ 	LED_NEW_POINT,		0x01
 	//Assumindo 50ms (Utilizar clock de 1kHZ)
-	.equ	POINT_TIME 			20
-	.equ	POINT_LED_TIME		5
-	.equ	LEVEL				16 //TEMP
+	.equ	POINT_TIME, 			20
+	.equ	POINT_LED_TIME,		5
+	.equ	LEVEL,				16 //TEMP
 
 /*
 	The point countdown will start with a the number of ticks required to score a point (1 second) plus the time
@@ -234,13 +227,13 @@ init_countdown_level:
 
 //Decrements the variable by one
 //void countdown_point_decrement()
-countdown_point_decrement:
+/*countdown_point_decrement:
 	mov r0, #1
 	ldr r1, countdown_level_adrr
 	ldr r2, [r1]
 	sub r2, r2, r0
 	str r2, [r1]
-	mov pc, lr
+	mov pc, lr*/
 
 //Checks if the countdown reached 0 and if it did, calls level_reached
 //void count_down_level_check()
@@ -655,7 +648,7 @@ sys_clock_elapsed_time:
 ; Rotina:    sw_is_pressed
 ; Descricao: 
 ; Entradas:  pins_mask
-; Saidas:    devolve 1 se detecta uma transição 0 -> 1 no pino identificado em pin_mask 
+; Saidas:    devolve 1 se detecta uma transicao 0 -> 1 no pino identificado em pin_mask 
 ;            e 0 se não detecta.   
 ; Efeitos:   
 ;---------------------------------------------------------------------------------	
