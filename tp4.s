@@ -173,13 +173,15 @@ countdown_point_check:
 	push lr
 	ldr r1, countdown_point_adrr
 	ldr r1, [r1]
-	mov r0, POINT_LED_TIME //score time has passed
+
+	mov r0, POINT_LED_TIME
+	sub POINT_TIME, POINT_LED_TIME
 	cmp r1, r0
-	beq point_LED_ON
+	beq point_LED_OFF
 
 	mov r0, #0
-	cmp r1, r0
-	beq point_scored //Resets
+	cmp r0, r1
+	beq point_scored
 	
 	pop pc
 
@@ -190,9 +192,7 @@ point_scored:
 	add r0, r0, #1	
 	bl set_score
 	bl point_LED_OFF
-	mov r0, POINT_LED_TIME
-	mov r1, POINT_TIME
-	add r0, r0, r1
+	mov r0, POINT_TIME
 	bl init_countdown_level
 
 //Turns on the Point LED
