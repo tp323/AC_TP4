@@ -18,14 +18,14 @@ addr_isr:
 	
 /* Constante relacioandas com a aplicacao. */	
 	.equ	IE_FLAG, 			0x10
-	.equ	OUTPORT_INITVALUE,	0x80
+	.equ	OUTPORT_INITVALUE,	0x00
 	.equ	LED_ON, 			1
 	.equ	LED_OFF, 			0
 	.equ	FIELD_MASK,			0xFE
 	.equ	PLAYER_MASK,		0x80
 	.equ	WALL_MASK,			0x02
 	.equ	RAKET_MASK,			0x01
-
+	.equ	LEVEL_MASK			0xC0
 
 	.text
  
@@ -34,107 +34,84 @@ main:
 	push r4 
 	push r5
 	push r6
-	
+
+init_game:	
 	bl outport_init
 	/* Inicializa o porto de saida e os valores necessarios ao inicio do jogo: posição, pontos e direção.
 	score set score = 0*/
 	mov r4, PLAYER_MASK // Ball current index0 
+	mov r0, PLAYER_MASK	
+	bl LED_set_on
+
 	mov r5, #1			// Direction (1- UP, 0 - DOWN)
 	mov r0, #0	
 	bl set_score 		//score set score = 0
+
+	mov r0, #50
+	bl timer_init
 	bl IRQ_enable
 	
-	mov r0, PLAYER_MASK	
-	bl LED_set_on
-	
 wait_for_init_stroke:	
+	bl get_level
 	mov r0, RAKET_MASK
-	bl sw_is_pressed
+	bl check_swing
 	sub r0,r0,0
 	bzs wait_for_init_stroke
 	
 start_game:
-	//bl timer_init	
 	
-	bl init_timer_1s
-	bl init_timer_lvl
+	bl init_countdowns
 	bl move_ball
 	
 loop_game:
-	bl led_new_point_handler
+	bl count_point_check
+	bl count_down_level_check
 
-	ldr r0, timer_level_adrr
-	bl timer_elapsed
-	mov r1, valor_do_tempo_por_transicao_level
+	bl is_player
+	mov r1, #0
 	cmp r0, r1
-	bhs move_ball
-	
+	beq loop_game
+
+	bl check_swing
+	cmp r0, r1
+	beq loop_game
+
+
+	mov r0, r4
+	bl move_ball
+	mov r4, r0
 	bl check_position
 	
 	b loop_game
+
+game_over:
+	bl timer_stop
 	pop r6
 	pop r5
 	pop r4
 	pop pc
 
 
-led_new_point_handler:
-	push lr
-	mov	r1, valor_de_um_segundo
-	lsr r2, r1, #2	//avoid using another var for valor_de_um_.250seg by doing 1s/4=.250s
-	bl timer_elapsed
+/* --------------------------------------------------------------------- AUXILIARY FUNCTIONS --------------------------------------------------------------------- */
 
-	//if higher than .25s turn led_off
-	cmp r0, r2
-	bhs led_new_point_off
-	//if higher than 1s  turn led_on
-	cmp r0, r1
-	bhs led_new_point_on
-	pop pc
-	
-	
-one_second_pass:
-	push lr	
-	
-	
-	bl init_timer_1s	//restart timer
-	
-	
-	bl led_new_point_on	
-	
-	pop lr
-
-	
-led_new_point_on:
+get_level:
 	push lr
-	mov r0, #1
-	ldr r1, led_new_point_state_addr
-	strb r0, [r1]	
-	mov r0, LED_NEW_POINT	
-	bl LED_set_on	
-	pop lr
-
-	
-led_new_point_off:
-	push lr
-	mov r0, LED_NEW_POINT	
-	bl LED_set_off
-	mov r0, LED_OFF
-	ldr r1, led_new_point_state_addr
+	bl port_read
+	mov r1, LEVEL_MASK
+	and r0, r0, r1
+	mov r1, #6
+	lsr r0, r0, r1
+	ldr r1, level_speed_addr
+	ldr r0, [r1, r0]	// Level speed stored in r0
+	ldr r1 current_speed_addr
 	strb r0, [r1]
 	pop pc
 
-time_level_passed:	
-	push lr
-	
-	
-	mov r1, PLAYER_MASK
-	cmp r1, r4 //TODO ALTERAR PARA VAR DE POSIÇÃO
-	bhs game_over
-	bl move_ball
-	bl init_timer_lvl
-	
-	pop pc
+level_speed_addr:
+	.level_speed
+
+current_speed_addr:
+	.current_speed
 
 	.equ 	LED_NEW_POINT,		0x01
 	//Assumindo 50ms (Utilizar clock de 1kHZ)
@@ -213,6 +190,8 @@ point_LED_OFF:
 
 countdown_point_adrr:
 	.word countdown_point
+
+// ----------------------------------------------------------------
 /*
 	The level countdown will start with a the number of ticks required for each ball movement. Each tick will
 	countdown the variable and once it reaches zero, the ball moves and the cycle restarts.
@@ -227,13 +206,13 @@ init_countdown_level:
 
 //Decrements the variable by one
 //void countdown_point_decrement()
-/*countdown_point_decrement:
+countdown_level_decrement:
 	mov r0, #1
 	ldr r1, countdown_level_adrr
 	ldr r2, [r1]
 	sub r2, r2, r0
 	str r2, [r1]
-	mov pc, lr*/
+	mov pc, lr
 
 //Checks if the countdown reached 0 and if it did, calls level_reached
 //void count_down_level_check()
@@ -258,6 +237,17 @@ level_reached:
 
 countdown_level_adrr:
 	.word countdown_level
+
+// ----------------------------------------------------------------		
+
+init_countdowns:
+	push lr
+	mov r0, POINT_TIME
+	bl init_countdown_point
+	ldr r0, level_speed_addr
+	ldr r0, [r0]
+	bl init_countdown_level
+	pop pc
 
 //Updates the score variable in memory with the score passed as parameter
 // void set_score(int score)
@@ -317,37 +307,59 @@ mov_down:
 //void check_position(positionIndex)
 check_position:
 	push lr
-	mov r1, WALL_MASK
-	cmp r1, r0
-	beq is_wall_position
-	
-	mov r1, PLAYER_MASK
-	cmp r1, r0
-	beq is_player_position
+	push r4
 
-	pop pc
-
-
-//Switches direction and awaits for raket swing
-//void is_player_position()
-is_player_position:
-	push lr
-	mov r5, #1
-	mov r0, RAKET_MASK
-	bl sw_is_pressed
+	mov r4, r0
+	bl is_wall
 	mov r1, #1
 	cmp r0, r1
-	beq inverte_ball	
-	mov r0, #1
+	beq	invert_direction
+
+	mov r0, r4
+	bl is_player
+	mov r1, #1
+	cmp r0, r1
+	beq invert_direction
+
+	pop r4
 	pop pc
 
-//Switches the direction of the ball
-//void is_wall_position()
-is_wall_position:
-	mov r5, #0
+//Check if the current position it the wall
+//boolean is_player(currentIndex)
+is_player:
+	mov r1, PLAYER_MASK
+	cmp r0, r1
+	beq player_found
+	mov r0, #0
+	mov pc lr
+
+player_found:
+	mov r0, #1
 	mov pc, lr
+
+
+//Check if the current position it the player
+//boolean is_wall(currentIndex)
+is_wall:
+	mov r1, WALL_MASK
+	cmp r0, r1
+	beq wall_found
+	mov r0, #0
+	mov pc lr
+
+wall_found:
+	mov r0, #1
+	mov pc, lr
+
+
+//Switches direction
+//void invert_direction()
+invert_direction:
+	mov r0, #1
+	eor r5, r5, r0
+	mov pc lr
 	
-/* --------------------------------------------------------------------- AUXILIARY FUNCTIONS --------------------------------------------------------------------- */
+	
 /* Acende o led no índice idx do porto de saída.
 void LED_set_on(uint8_t idx);
 */
@@ -633,42 +645,33 @@ sys_clock_elapsed_time:
 	sub		r0, r0, r1
 	pop		pc
 
-;---------------------------------------------------------------------------------	
-;uint8_t sw_is_pressed(uint8_t pin_mask) {
-;uint8_t sw_new_state;
-;   sw_new_state = inport_test_bits( pin_mask );
-;	if ( sw_state == sw_new_state )
-;		return 0;
-;	sw_state = sw_new_state;
-;   if ( sw_new_state == 0 )
-;		return 0;
-;	return 1;
-;}
-;---------------------------------------------------------------------------------	
-; Rotina:    sw_is_pressed
-; Descricao: 
-; Entradas:  pins_mask
-; Saidas:    devolve 1 se detecta uma transicao 0 -> 1 no pino identificado em pin_mask 
-;            e 0 se não detecta.   
-; Efeitos:   
-;---------------------------------------------------------------------------------	
-sw_is_pressed:
-	push	lr
-	bl		inport_test_bits 
-	; r0 = sw_new_state = inport_test_bits(pins_mask)
-	ldr		r1, sw_state_address
-	ldrb	r2, [r1, #0]	; r2 = sw_state
-	cmp		r0, r2			; sw_state == sw_new_state
-	beq		sw_is_pressed_0
-	strb	r0, [r1, #0]	; sw_state = sw_new_state;
-	sub		r0, r0, #0
-	beq		sw_is_pressed_0
-	mov		r0, #1
-	b		sw_is_pressed_1
-sw_is_pressed_0:
-	mov		r0, #0
-sw_is_pressed_1:
-	pop		pc
+
+//------------------------------------------------ SUBSTITUIR PELA FORNECIDA NAS AULAS
+//Checks if there was a transiction from 0 to 1
+//boolean check_swing()
+check_swing:
+	push lr
+	mov r0, sw_state_address
+	ldr r0, [r0]
+	mov r1, #0
+	cmp r0, r1	//checking if the last recorded position is racket down
+	bne no_swing
+
+	mov r1, 0x0F
+	mov r2, #0
+	bl port_read_bit
+	mov r1, #0
+	cmp r0, r1
+	bne swing
+
+no_swing:
+	mov r0 #0
+
+swing:
+	mov r1, sw_state_address
+	strb r0, [r1]
+	pop pc
+//------------------------------------------------
 
 sw_state_address:
 	.word	sw_state
@@ -676,6 +679,10 @@ sw_state_address:
 
 /* Interrupt Service Routine */
 isr:
+	push lr
+	bl countdown_point_decrement
+	bl countdown_level_decrement
+	pop lr
 	movs	pc, lr; PC = LR; CPSR = SPSR
 	
 
@@ -686,8 +693,12 @@ countdown_point:
 	.word	0
 score:
 	.word	0
-sys_clock:
-	.word	0
+current_speed:
+	.word 0
+level_speed:
+	.byte 12, 6, 3
+racket_position:
+	.byte 0
 port_img:
 	.space	1
 sw_state:
