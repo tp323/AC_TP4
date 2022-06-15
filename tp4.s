@@ -1,21 +1,97 @@
+; Ficheiro:  p16_extint_demo.S
+; Descricao: Programa para exemplificar o funcionamento do sistema de
+;            interrupcoes do processador P16.
+; Autor:     
+; Data:      03-01-2022
+
+; Definicao dos valores dos simbolos utilizados no programa
+;
+	.equ	STACK_SIZE, 64             ; Dimensao do stack (em bytes)
+
+	.equ    INPORT_ADDRESS, 0xFF00  ; Endereço do porto de entrada da placa SDP16
+	.equ	OUTPORT_ADDRESS, 0xFF00 ; Endereço do porto de saida da placa SDP16
+
+	.equ	CPSR_BIT_I, 0x10          ; Mascara para a flag I do registo CPSR
+
+	.equ	SYSCLK_FREQ, 0x5          ; Intervalo de contagem do circuito pTC
+                                          ; que suporta a implementação do sysclk
+										  ; fin_pTC = 10Hz fout_ptc=2Hz => T=500ms 
+										  ; TMR = 10Hz/2Hz = 5
+	.equ 	LED0_MASK, 0x01
+	.equ 	OUTPORT_INIT_VALUE, 0x00
+
+	.equ 	IE_MASK,0x10
+
+	.equ    pTC_ADDRESS, 0XFF40
+	.equ    pTC_TCR, 0
+	.equ    pTC_TMR, 2
+	.equ    pTC_TC,  4
+	.equ    pTC_TIR, 6
+	
+	.equ    pTC_CMD_STOP,  1
+	.equ    pTC_CMD_START, 0
+
+	.equ 	PLAYER_MASK, 0X80
+	.equ	WALL_MASK,   0X02
+	.equ 	NEW_POINT_LED_MASK, 0X1
+	.equ	BALL_LEDS_MASK, 0xfe
+	.equ 	RAKET_MASK, 0x01
+	.equ	VALU_OF_1S, 0xFF
+	.equ	VALU_OF_25, 0xEF
+; Seccao:    .startup
+; Descricao: Guarda o código de arranque do sistema
+;
 	.section .startup
-	b		_start
-	ldr		pc, addr_isr
+	b 	_start
+	ldr	pc, isr_addr
+
 _start:
-	ldr		sp, addr_stack_top
-	mov		r0, pc
-	add		lr, r0, 4
-	ldr		pc, addr_main
-	b		.	
-addr_stack_top:
-	.word	stack_top
-addr_main:
-	.word 	main
-addr_isr:
+	ldr sp, tos_addr
+	bl SYS_init
+	ldr	pc, main_addr
+
+tos_addr:
+	.word	tos
+main_addr:
+	.word	main
+isr_addr:
 	.word	isr
 	
-
+;----------------------------------------	
+;# define OUTPORT_INIT_VALUE 0
+;# define LED0_MASK 1
+;
+;uint16_t ticks = 0;
+; 
+;void main() {
+;uint16_t t;
+;	outport_init ( OUTPORT_INIT_VALUE );
+;	timer_init ( SYSCLK_FREQ );
+;   //Habilitar o atendimento das interrupcoes
+;   while(1) {
+;		outport_set_bits(LED0_MASK);
+;		t = sysclk_get_value ();
+;		while ( sysclk_elapsed ( t ) < LED_TOGGLE_TIME );
+;		outport_clear_bits(LED0_MASK);
+;		t = sysclk_get_value ();
+;		while ( sysclk_elapsed ( t ) < LED_TOGGLE_TIME );
+;   }
+;}
+;----------------------------------------	
+	.text
+SYS_init:
+	push lr
+	bl outport_init		
+	bl timer_stop
+	ldr		r0, ticks_addrb
+	ldr		r1, [r0, #0]
+	mov		r1,  #0
+	str		r1, [r0, #0]
+	mov r0, 0x80
+	ldr r1, ball_pos_addr_ddd
+	strb r0, [r1]
 	
+<<<<<<< Updated upstream
 /* Constante relacioandas com a aplicacao. */	
 	.equ	IE_FLAG, 			0x10
 	.equ	OUTPORT_INITVALUE,	0x00
@@ -26,10 +102,29 @@ addr_isr:
 	.equ	WALL_MASK,			0x02
 	.equ	RAKET_MASK,			0x01
 	.equ	LEVEL_MASK			0xC0
+=======
+	
+	mov r0, #1
+	mov r1, 0xE0
+	bl timer_write		
+	;bl timer_clearInterrupt	
 
-	.text
- 
+>>>>>>> Stashed changes
+
+
+	mov r0, IE_MASK
+
+	msr cpsr, r0	
+	pop pc	
+	
+ball_pos_addr_ddd:
+	.word 	ball_pos	
+	
+ticks_addrb:
+	.word ticks
+
 main:
+<<<<<<< Updated upstream
 	push lr
 	push r4 
 	push r5
@@ -147,47 +242,195 @@ countdown_point_decrement:
 //zero turns off the LED and resets
 //void count_point_check()
 countdown_point_check:
-	push lr
-	ldr r1, countdown_point_adrr
-	ldr r1, [r1]
-
-	mov r0, POINT_LED_TIME
-	sub POINT_TIME, POINT_LED_TIME
-	cmp r1, r0
-	beq point_LED_OFF
-
-	mov r0, #0
-	cmp r0, r1
-	beq point_scored
+=======
+	push lr	
+	bl timer_stop
+	ldr r0, direction_addr_cc
+	mov r1, 0
+	strb r1, [r0]
+	b main_while
 	
-	pop pc
+direction_addr_cc:
+	.word	direction
+	
+main_while:
+	bl set_ball_leds
+	
+wait_for_init_stroke:
+	mov r0, RAKET_MASK
+	bl sw_is_pressed
+	add r0,r0,0
+	bzc start_game  
+	b    wait_for_init_stroke
+start_game:		
+	bl timer_start
+	bl init_timer_lvl
+	bl init_timer_1s
+	bl mov_ball
+	bl set_ball_leds
+game_loop:
 
-//Increments the point variable, turns off th LED and resets
-//void point_scored()
-point_scored:
-	bl get_score
-	add r0, r0, #1	
-	bl set_score
-	bl point_LED_OFF
-	mov r0, POINT_TIME
-	bl init_countdown_level
-
-//Turns on the Point LED
-//void point_LED_ON()
-point_LED_ON:
+	ldr r1, timer_1s_adrrvv
+	ldr r0, [r1]
+	bl sysclk_elapsed
+	mov r1, VALU_OF_1S
+	cmp r0, r1 ;20
+	bhs one_second_pass_spik
+	bl one_second_pass
+one_second_pass_spik:	
+	ldr r0, new_point_led_addr
+	ldrb r0,[r0]
+	sub r0,r0,0
+	bzs time_lvl
+	
+	ldr r1, timer_1s_adrrvv
+	ldr r0, [r1]
+	bl sysclk_elapsed
+	mov r1, VALU_OF_25
+	cmp r0, r1 ;20
+	blo	time_lvl	
+	mov r0, 0
+	bl set_led_newpoint
+timer_1s_adrrvv:
+	.word 	timer_1s	
+time_lvl:	
+	ldr r1, timer_level_adrr
+	ldr r0, [r1]
+	bl sysclk_elapsed
+	mov r1, 0x0d ;TODO GET TIME OF LEVEL FROM A VAR-----------------
+	cmp r0, r1 ;20	
+	blo level_up_skip
+	
+	bl init_timer_lvl 
+	ldr r0, ball_pos_addrb
+	ldrb r0, [r0]
+	mov r2, PLAYER_MASK
+	sub r0, r0, r2
+	bzc game_over_skip
+	b game_over
+game_over_skip:
+	bl mov_ball
+	bl set_ball_leds
+	bl init_timer_lvl
+	
+level_up_skip:	
+	;ball in wall ?
+	ldr r0, ball_pos_addrb
+	ldrb r0, [r0]
+	;mov r2, WALL_MASK
+	sub r0, r0, WALL_MASK
+	bzc skip_invert_dir
+	bl invert_dir
+skip_invert_dir:
+	;ball in player? 
+	ldr r0, ball_pos_addrb
+	ldrb r0, [r0]
+	mov r2, PLAYER_MASK
+	sub r0, r0, r2	
+	bzc game_loop
+	;raket? 
+	mov r0, RAKET_MASK
+	bl sw_is_pressed
+	add r0,r0,0
+	bzs  game_loop
+	
+	bl invert_dir
+	bl init_timer_lvl	
+	bl mov_ball
+	bl set_ball_leds
+	
+	b game_loop
+	
+game_over:	
+	bl invert_dir
+	b  main_while 	
+	
+	
+	
+	
+invert_dir:
 	push lr
-	mov r0, #0
-	bl LED_set_on
+	ldr r0, direction_addr
+	ldrb r1, [r0]
+	mov r2, 1
+	eor r1, r1, r2
+	strb r1, [r0]
 	pop pc
+	
+direction_addr:
+	.word	direction
+	
+new_point_led_addr:
+	.word 	new_point_led
 
-//Turns on the Point LED
-//void point_LED_OFF()
-point_LED_OFF:
+
+	
+	
+		
+score_addr:
+	.word 	score
+	
+one_second_pass:
+	;SCORE ++
+	;LED ON NEW POINT
+	;INIT TIMER
 	push lr
-	mov r0, #0
-	bl LED_set_off
+	bl init_timer_1s
+	mov r0, 1
+	bl set_led_newpoint
+	bl add_score
 	pop pc
+	
+timer_level_adrr:
+	.word timer_level
 
+set_ball_leds:
+	push lr	
+	ldr	r1, ball_pos_addrb
+	ldrb r1, [r1]
+	mov r0, BALL_LEDS_MASK
+	bl	outport_write_bits	
+	pop pc
+	
+timer_1s_adrr:
+	.word 	timer_1s	
+	
+ball_pos_addrb:
+	.word 	ball_pos	
+; set led new point to the valu of r0	
+set_led_newpoint:
+>>>>>>> Stashed changes
+	push lr
+	ldr r1, new_point_led_addrbbb
+	strb r0, [r1]
+	mov r1,r0
+	mov r0, NEW_POINT_LED_MASK
+	bl	outport_write_bits
+	pop pc
+new_point_led_addrbbb:
+		.word	new_point_led
+
+	
+init_timer_1s:
+	push lr
+	bl sysclk_get_value	
+	ldr r1, timer_1s_adrrb
+	str r0, [r1]	
+	pop pc
+	
+timer_1s_adrrb:
+	.word 	timer_1s	
+	
+init_timer_lvl:
+	push lr
+	bl sysclk_get_value	
+	ldr r1, timer_level_adrrb
+	str r0, [r1]	
+	pop pc
+	
+	
+
+<<<<<<< Updated upstream
 countdown_point_adrr:
 	.word countdown_point
 
@@ -224,20 +467,16 @@ count_down_level_check:
 	cmp r0, r2
 	beq level_reached
 	pop pc
+=======
 
-//Resets the countdown and moves ball
-//level_reached()
-level_reached:
-	push lr
-	mov r0, LEVEL
-	bl init_countdown_level
-	bl move_ball
-	pop pc
+timer_level_adrrb:
+	.word timer_level
+>>>>>>> Stashed changes
 
 
-countdown_level_adrr:
-	.word countdown_level
 
+
+<<<<<<< Updated upstream
 // ----------------------------------------------------------------		
 
 init_countdowns:
@@ -256,53 +495,14 @@ set_score:
 	ldr r1, score_addr
 	str r0, [r1]
 	pop pc
+=======
+>>>>>>> Stashed changes
 	
-//Returns the value of the variable score saved in memory
-// int get_score()	
-get_score:
-	push lr
-	ldr r1, score_addr
-	ldr r0, [r1]
-	pop pc
-		
-score_addr:
-	.word 	score	
-led_new_point_state_addr:
-	.word 	led_new_point_state		
 
 
-//Move the ball one position on the current direction. Returns new position index
-// int move_ball(positionIndex)
-move_ball:
-	push lr
-	mov r1, #0
-	cmp r0, r1
-	beq mov_down
-	b mov_up	
-	pop pc
 
-//Moves the ball one position up, and returns the new position index
-//int mov_up(positionIndex)
-mov_up:
-	push lr
-	lsr r0, r0, #1
-	mov r2, r0
-	mov r1, FIELD_MASK
-	mov r0, #1
-	bl port_write_bit_range
-	pop pc
 
-//Moves the ball one position down, and returns the new position index
-//int mov_down(positionIndex)
-mov_down:
-	push lr
-	lsl r0, r0, #1
-	mov r2, r0
-	mov r1, FIELD_MASK
-	mov r0, #1
-	bl port_write_bit_range
-	pop pc
-
+<<<<<<< Updated upstream
 //Checks if the position the ball is currently in is either the wall or the player
 //void check_position(positionIndex)
 check_position:
@@ -322,8 +522,61 @@ check_position:
 	beq invert_direction
 
 	pop r4
-	pop pc
+=======
+ball_pos_addr:
+	.word 	ball_pos
+	
 
+	
+add_score:	
+	ldr r0, score_addr_bb
+	ldr r1, [r0]
+	add r1, r1, 1
+	str r1, [r0]
+	mov pc, lr
+	
+score_addr_bb:
+	.word score
+;-------------------------------------------------------------------------
+; Rotina:    mov_ball
+; Descricao: R
+; Entradas:  -
+; Saidas:    -
+; Efeitos:   
+; void mov_ball() {
+;   
+;}	
+mov_ball:
+	push lr
+	ldr r0, ball_pos_addr_cc
+	ldrb r0, [r0]	
+	ldr r1, direction_addr_bb
+	ldrb r1, [r1]
+	mov r2, 1
+	and r1,r1,r2
+	sub r1, r1, 0	
+	bzs mov_away
+	;move from wall to player (BALL_POS6)01 -> (BALL_POS0)07   
+	lsl r0, r0,1	
+	b finish_mov
+mov_away:
+	lsr r0, r0,1
+	
+finish_mov:
+	ldr r1, ball_pos_addr_cc
+	strb r0, [r1]
+	
+>>>>>>> Stashed changes
+	pop pc
+	
+	
+direction_addr_bb:
+	.word direction
+	
+ball_pos_addr_cc:
+		.word ball_pos
+
+<<<<<<< Updated upstream
 //Check if the current position it the wall
 //boolean is_player(currentIndex)
 is_player:
@@ -368,283 +621,130 @@ LED_set_on:
 	mov		r1, LED_ON
 	bl		port_write_bit
 	pop		pc
-
-/* Apaga o led no índice idx do porto de saída.
-void LED_set_off(uint8_t idx);
-*/
-LED_set_off:
-	push	lr
-	mov		r1, LED_OFF
-	bl		port_write_bit
-	pop		pc
-	
-/* Inicia o porto de saída com o valor v.
-void outport_init(uint8_t v);
-*/
-outport_init:
-	push	lr
-	mov		r0, OUTPORT_INITVALUE
-	bl		port_write
-	pop		pc
-	
-/* Ativa o atendimento de interrupções externas. Mantém as restantes flags.
-void IRQ_enable();
-*/	
-IRQ_enable:
-	mrs		r0, cpsr
-	mov		r1, #IE_FLAG
-	orr		r0, r0, r1
-	msr		cpsr, r0
-	mov		pc, lr
-/* Inibe o atendimento de interrupções externas. Mantém as restantes flags.
-void IRQ_disable();
-*/	
-IRQ_disable:
-	mrs		r0, cpsr
-	mov		r1, #IE_FLAG
-	mvn		r1, r1
-	and		r0, r0, r1
-	msr		cpsr, r0
-	mov		pc, lr
-		
-;----------------------------------------------------------------
-; API relacionada com o temporizador PicoTimer/Counter
-;----------------------------------------------------------------
-/* Constantes relacionada com o temporizador PicoTimer/Counter */	
-	.equ pTC_ADDRESS, 		0xFF40
-	.equ pTC_TCR, 			0
-	.equ pTC_TMR, 			2
-	.equ pTC_TC, 			4
-	.equ pTC_NTIR,			6
-	.equ pTC_CMD_START, 	0
-	.equ pTC_CMD_STOP, 	1
-	
-/* Funcao para fazer a iniciacao do periferico
-para habilitar o funcionamento em modo
-continuo e com intervalo de contagem
-interval ticks . 
-void timer_init ( uint8_t interval );
-*/	
-timer_init:
-	push 	lr
-	push 	r0
-	; Parar contagem
-	bl 		timer_stop
-	; Programar intervalo de contagem
-	pop 	r0
-	ldr 	r1, ptc_address
-	strb 	r0, [r1, pTC_TMR]
-	; Reiniciar contagem
-	bl 		timer_start
-	pop 	pc
-	
-/* Funcao para devolver o valor corrente da
-contagem do periferico .
-uint8_t timer_get_value ( void );
-*/
-timer_get_value:
-	ldr 	r1, ptc_address
-	ldrb 	r0, [r1, #pTC_TC]
-	mov 	pc, lr
-
-/* Funcao para devolver o tempo decorrido desde
-o instante last_read . O tempo e medido em
-unidades de contagem ( ticks ). 
-uint8_t timer_elapsed ( uint8_t last_read );
-*/
-timer_elapsed:
-	push 	lr
-	push 	r0
-	bl 		timer_get_value
-	pop 	r1
-	sub 	r0, r0, r1
-	pop 	pc
-
-/* Funcao para iniciar a contagem no periferico .
-void timer_start ( void );
-*/
-timer_start:
-	mov 	r0, #pTC_CMD_START
-	ldr 	r1, ptc_address
-	strb 	r0, [r1, #pTC_TCR ]
-	mov 	pc, lr
-
-/* Funcao para parar a contagem no periferico . A
-paragem da contagem faz clear a contagem .
-void timer_stop ( void );
-*/	
-timer_stop:
-	mov 	r0, #pTC_CMD_STOP
-	ldr 	r1, ptc_address
-	strb 	r0, [r1, #pTC_TCR ]
-	mov 	pc, lr
-	
-timer_clr_irq:
-	;ToDo
-	
-ptc_address:
-	.word 	pTC_ADDRESS
-
-;----------------------------------------------------------------
-; API relacionada com portos paralelos (entrada e saída)
-;----------------------------------------------------------------
-	.equ PORT_ADDRESS, 0xFF00
-/* Retorna o valor presente á entrada do porto de entrada 
-uint8_t port_read();
-*/
-port_read:
-	ldr		r0, addr_port
-	ldrb	r0, [r0]
-	mov		pc, lr
-
-/* Escreve o byte recebido por parâmetro no porto de saída
-void port_write(uint8_t v);
-*/
-port_write:
-	ldr		r1, addr_port
-	strb	r0, [r1]
-	ldr		r1, addr_port_img
-	strb	r0, [r1]
-	mov		pc, lr
-
-/* Retorna o valor do bit no índice idx da palavra v.
-   A função retorna o valor 1 ou 0.
-uint8_t port_read_bit(uint8_t v, uint8_t idx);
-*/
-port_read_bit:
-	push	lr
-	bl		lsr_r_r
-	mov		r1, 1
-	and		r0, r0, r1
-	pop		pc
-
-
-/* Atualiza no porto de saída o valor do bit no índice idx com o valor v.
-   Os restantes bits permanecem inalterados.
-void port_write_bit(uint8_t idx, uint8_t v);
-*/
-port_write_bit:
-	push	lr
-	mov		r2, r1
-	mov		r1, 1
-	bl		port_write_bit_range
-	pop		pc
-
-
-/* Atualiza no porto de sa�da o valor dos bits correspondente ao intervalo
-   definido por idx e msk com o valor v.
-   Os restantes bits permanecem inalterados.
-void port_write_bit_range(uint8_t idx, uint8_t msk, uint8_t v);
-*/
-port_write_bit_range:
-	push	lr
-	push	r4
-	push	r2 		; preserva o valor v no topo do stack
-	; lsl	msk, idx
-	eor		r0, r0, r1
-	eor		r1, r0, r1
-	eor		r0, r0, r1
-	mov		r4, r1  ; R4 = idx
-	bl		lsl_r_r
-	; lsl	v, idx
-	mov		r1, r4
-	mov		r4, r0	; R4 = msk << idx
-	pop		r0		; recupera o valor v do topo do stack
-	bl		lsl_r_r
-	mvn		r4, r4
-	ldr		r1, addr_port_img
-	ldrb	r1, [r1]
-	and		r1, r1, r4
-	orr		r0, r1, r0
-	bl		port_write
-	pop		r4
-	pop		pc
-
-addr_port:
-	.word	PORT_ADDRESS
-addr_port_img:
-	.word	port_img
-
-;----------------------------------------------------------------
-; Fun��es auxiliares que retornam os resultados do deslocamento 
-; de lsl rx, ry e lsr rx, ry
-;----------------------------------------------------------------
-/* Deslocamento para a direita de x, y bits (y entre 0 e 7).
-uint8_t lsr_r_r(uint8_t x, uint8_t y);
-*/
-lsr_r_r:
-	lsl		r1, r1, 2
-	add		pc, r1, pc
-	lsr		r0, r0, 0
-	mov		pc, lr
-	lsr		r0, r0, 1
-	mov		pc, lr
-	lsr		r0, r0, 2
-	mov		pc, lr
-	lsr		r0, r0, 3
-	mov		pc, lr
-	lsr		r0, r0, 4
-	mov		pc, lr
-	lsr		r0, r0, 5
-	mov		pc, lr
-	lsr		r0, r0, 6
-	mov		pc, lr
-	lsr		r0, r0, 7
-	mov		pc, lr
-/* Deslocamento para a esquerda de x, y bits (y entre 0 e 7).
-uint8_t lsl_r_r(uint8_t x, uint8_t y);
-*/
-lsl_r_r:
-	lsl		r1, r1, 2
-	add		pc, r1, pc
-	lsl		r0, r0, 0
-	mov		pc, lr
-	lsl		r0, r0, 1
-	mov		pc, lr
-	lsl		r0, r0, 2
-	mov		pc, lr
-	lsl		r0, r0, 3
-	mov		pc, lr
-	lsl		r0, r0, 4
-	mov		pc, lr
-	lsl		r0, r0, 5
-	mov		pc, lr
-	lsl		r0, r0, 6
-	mov		pc, lr
-	lsl		r0, r0, 7
-	mov		pc, lr
-
-;----------------------------------------------------------------
-; API relacionada com o relógio de sistema
-;----------------------------------------------------------------
-/* Inicia o relógio de sistema com o valor init_value.
-uint16_t sys_clock_init(uint16_t init_value);
-*/
-sys_clock_init:
-	ldr		r1, addr_sys_clock
-	str		r0, [r1]
-	mov		pc, lr
-	
-/* Retorna o valor atual do relógio de sistema.
-uint16_t sys_clock_get_time();
-*/
-sys_clock_get_time:
-	ldr		r0, addr_sys_clock
-	ldr		r0, [r0]
-	mov		pc, lr
-
-/* Retorna o tempo decorrido desde time_ref até ao valor atual 
-   do relógio de sistema.
-uint16_t sys_clock_elapsed_time(uint16_t time_ref);
-*/
-sys_clock_elapsed_time:
-	push	lr
+=======
+;-------------------------------------------------------------------------
+; Rotina:    isr
+; Descricao: Rotina responsavel pelo processamento do pedido de interrupcao.
+; Entradas:  -
+; Saidas:    -
+; Efeitos:   Incrementa o valor da variavel global ticks
+; void isr() {
+;   ticks++;
+;	//clear Interrupt Request
+;}
+isr:
+	; Prologo
 	push	r0
-	bl		sys_clock_get_time
+	push	r1
+	push	r2
+	; Corpo da rotina
+	ldr		r0, ticks_addr
+	ldr		r1, [r0, #0]
+	add		r1, r1, #1
+	str		r1, [r0, #0]
+	; clear Interrupt Request
+	;bl 	timer_clearInterrupt
+	mov r1, 0xFF
+	ldr  r0, ptc_addr
+	strb r1, [ r0, #pTC_TIR ]
+	;bl timer_write	
+	; Epilogo
+	pop		r2
 	pop		r1
-	sub		r0, r0, r1
-	pop		pc
+	pop		r0
+	movs	pc, lr
+	
+>>>>>>> Stashed changes
 
+	
+timer_clearInterrupt:
+	mov r0, 0
+	ldr r1, timer_addressr
+	strb r0, [ r1, #pTC_TIR ]
+	mov pc, lr
+	
+timer_addressr:
+	.word  pTC_ADDRESS	
+;-------------------------------------------------------------------------
+;Funcao para devolver o valor corrente da variável global ticks.
+;uint16_t sysclk_get_value ( void );
+;	return ticks;
+;-------------------------------------------------------------------------
+sysclk_get_value:
+	ldr		r1, ticks_addr
+	ldr  	r0, [r1, #0] 	; r0 = ticks
+	mov		pc, lr
+
+;-------------------------------------------------------------------------
+;Funcao para devolver o tempo decorrido desde o instante last_read. 
+;O tempo e medido em unidades de contagem ( ticks ).
+;uint8_t sysclk_elapsed ( uint16_t last_read ){
+;	return ( ticks - last_read )
+;}
+;-------------------------------------------------------------------------
+sysclk_elapsed:
+	ldr	 r1, ticks_addr
+	ldr  r2, [r1, #0] 	; r0 = ticks
+	sub  r0, r2, r0
+	mov  pc,lr
+
+ticks_addr:
+	.word ticks
+	
+;-------------------------------------------------------------------------
+;Funcao para iniciar a contagem no periferico.
+;void timer_start ( void );
+;-------------------------------------------------------------------------
+timer_start:
+	mov  r1, #pTC_CMD_START
+	ldr  r0, ptc_addr
+	strb r1, [ r0, #pTC_TCR ]
+	mov  pc, lr
+
+
+timer_write:
+	ldr 	r2, timer_addressrc
+	add		r0, r0, r0
+	strb 	r1, [r2,r0]	
+	mov		pc,lr
+
+timer_addressrc:
+	.word  pTC_ADDRESS	
+;-------------------------------------------------------------------------
+;Funcao para parar a contagem no periferico. 
+;Colocando o contador com o valor zero.
+;void timer_stop ( void );
+;-------------------------------------------------------------------------
+timer_stop:
+	mov  r1, #pTC_CMD_STOP
+	ldr  r0, ptc_addr
+	strb r1, [ r0, #pTC_TCR ]
+	mov  pc, lr
+
+;-------------------------------------------------------------------------
+;Funcao que faz a iniciacao do periferico para habilitar o 
+;funcionamento em modo continuo e com intervalo de contagem 
+;interval, em ticks.
+;void timer_init ( uint8_t interval );
+;-------------------------------------------------------------------------
+timer_init:
+	push lr
+	push r0				
+	; Parar contagem
+	bl   timer_stop
+	; Programar intervalo de contagem
+	pop	 r0
+	ldr  r1, ptc_addr
+	strb r0, [ r1, #pTC_TMR ]
+	; Clear Interrupt Request
+	ldr  r1, ptc_addr
+	strb r0, [ r1, #pTC_TIR ]
+	pop  pc
+	
+ptc_addr:
+	.word pTC_ADDRESS
+
+<<<<<<< Updated upstream
 
 //------------------------------------------------ SUBSTITUIR PELA FORNECIDA NAS AULAS
 //Checks if there was a transiction from 0 to 1
@@ -672,11 +772,49 @@ swing:
 	strb r0, [r1]
 	pop pc
 //------------------------------------------------
+=======
+;---------------------------------------------------------------------------------	
+;uint8_t sw_is_pressed(uint8_t pin_mask) {
+;uint8_t sw_new_state;
+;   sw_new_state = inport_test_bits( pin_mask );
+;	if ( sw_state == sw_new_state )
+;		return 0;
+;	sw_state = sw_new_state;
+;   if ( sw_new_state == 0 )
+;		return 0;
+;	return 1;
+;}
+;---------------------------------------------------------------------------------	
+; Rotina:    sw_is_pressed
+; Descricao: 
+; Entradas:  pins_mask
+; Saidas:    devolve 1 se detecta uma transição 0 -> 1 no pino identificado em pin_mask 
+;            e 0 se não detecta.   
+; Efeitos:   
+;---------------------------------------------------------------------------------	
+sw_is_pressed:
+	push	lr
+	bl		inport_test_bits 
+	; r0 = sw_new_state = inport_test_bits(pins_mask)
+	ldr		r1, sw_state_address
+	ldrb	r2, [r1, #0]	; r2 = sw_state
+	cmp		r0, r2			; sw_state == sw_new_state
+	beq		sw_is_pressed_0
+	strb	r0, [r1, #0]	; sw_state = sw_new_state;
+	sub		r0, r0, #0
+	beq		sw_is_pressed_0
+	mov		r0, #1
+	b		sw_is_pressed_1
+sw_is_pressed_0:
+	mov		r0, #0
+sw_is_pressed_1:
+	pop		pc
+>>>>>>> Stashed changes
 
 sw_state_address:
 	.word	sw_state
-	
 
+<<<<<<< Updated upstream
 /* Interrupt Service Routine */
 isr:
 	push lr
@@ -684,15 +822,194 @@ isr:
 	bl countdown_level_decrement
 	pop lr
 	movs	pc, lr; PC = LR; CPSR = SPSR
+=======
+;---------------------------------------------------------------------------------	
+;uint16_t inport_test_bits(uint16_t pins_mask) {
+;	return ((inport_read() & pins_mask) == pins_mask);
+;}
+;---------------------------------------------------------------------------------	
+; Rotina:    inport_test_bits
+; Descricao: Devolve um se todos dos pinos do porto de entrada identificados com o valor um
+; em pins_mask tomaremm o valor logico um , ou zero no caso contrario .
+; Entradas:  Mascara com os bits a testar
+; Saidas:    Devolve um ou zero conforme a descrição.
+; Efeitos:   
+;---------------------------------------------------------------------------------	
+inport_test_bits:
+	push	lr
+	push	r4
+	mov		r4, r0
+	bl		inport_read
+	and		r0, r0, r4
+	cmp     r0, r4
+	beq		end_inport_test_bit_1
+	mov		r0, #0
+	b		end_inport_test_bit
+end_inport_test_bit_1:
+	mov		r0, #1
+end_inport_test_bit:
+	pop		r4
+	pop		pc
+>>>>>>> Stashed changes
 	
+;---------------------------------------------------------------------------------	
+;uint16_t inport_read() {
+;	return [INPORT_ADDRESS];
+;}
+;---------------------------------------------------------------------------------	
+; Rotina:    inport_read
+; Descricao: Devolve o valor corrente do estado dos pinos do porto de entrada.
+; Entradas:  
+; Saidas:    Valor corrente do porto
+; Efeitos:   
+;---------------------------------------------------------------------------------	
+inport_read:
+	ldr		r0, inport_address_local
+	ldrb		r0, [r0, #0]
+	mov		pc, lr
 
+inport_address_local:
+	.word	INPORT_ADDRESS
+
+
+
+
+;---------------------------------------------------------------------------------	
+;uint8_t outport_init(uint8_t initial_value) {
+;	outport_img = initial_value;
+;	outport_write(outport_img);
+;}
+;---------------------------------------------------------------------------------	
+; Rotina:    outport_init
+; Descricao: Inicia o porto de saida, atribuindo-lhe o valor do argumento passado 
+;			 a rotina.
+; Entradas:  Valor para iniciar o porto de saida
+; Saidas:    
+; Efeitos:   Atualiza o valor da variavel imagem do porto
+;---------------------------------------------------------------------------------	
+outport_init:
+	push	lr
+	mov r0 , #0
+	ldr		r1, outport_img_address
+	strb	r0, [r1, #0]
+	bl		outport_write
+	pop		pc
+
+;---------------------------------------------------------------------------------	
+;void outport_set_bits(uint8_t pins_mask) {
+;	outport_img |= pins_mask;
+;	ourport_write(outport_img);
+;}
+;---------------------------------------------------------------------------------	
+; Rotina:    outport_set_bits
+; Descricao: Atribui o valor logico '1' aos pinos do porto de saida identificados 
+;			 com o valor 1 no argumento passado a rotina. O estado dos restantes 
+;			 bits nao e alterado.
+; Entradas:  Mascara com os bits a alterar
+; Saidas:    
+; Efeitos:   Atualiza o valor da variavel imagem do porto
+;---------------------------------------------------------------------------------	
+outport_set_bits:
+	push	lr
+	ldr		r1, outport_img_address
+	ldrb	r2, [r1, #0]
+	orr		r0, r2, r0
+	strb	r0, [r1, #0]
+	bl		outport_write
+	pop		pc
+
+;---------------------------------------------------------------------------------	
+;void outport_clear_bits(uint8_t pins_mask) {
+;	outport_img &= ~pins_mask ;
+;	ourport_write(outport_img);
+;}
+;---------------------------------------------------------------------------------	
+; Rotina:    outport_clear_bits
+; Descricao: Atribui o valor logico '0' aos pinos do porto de saida identificados 
+;			 com o valor 1 no argumento passado a rotina. O estado dos restantes 
+;			 bits nao e alterado.
+; Entradas:  Mascara com os bits a alterar
+; Saidas:    
+; Efeitos:   Atualiza o valor da variavel imagem do porto
+;---------------------------------------------------------------------------------	
+outport_clear_bits:
+	push	lr
+	ldr		r1, outport_img_address
+	ldrb	r2, [r1, #0]
+	mvn		r0, r0
+	and		r0, r2, r0
+	strb	r0, [r1, #0]
+	bl		outport_write
+	pop		pc
+
+;---------------------------------------------------------------------------------	
+;void outport_write_bits(uint8_t pins_mask, uint8_t value) {
+;	value &= pins_mask;
+;	outport_img &= ~pins_mask;
+;	outport_img |= value;
+;	ourport_write(outport_img)
+;}
+;---------------------------------------------------------------------------------	
+; Rotina:    outport_write_bits
+; Descricao: Atribui aos pinos do porto de saida identificados com o valor lógico
+;            um em pins_mask o valor dos bits correspondentes de value. O estado 
+;            dos restantes bits nao e alterado.
+; Entradas:  Mascara com os bits a alterar
+;         :  valor dos bits a alterar  
+; Saidas:    
+; Efeitos:   Atualiza o valor da variavel imagem do porto
+;---------------------------------------------------------------------------------	
+outport_write_bits:
+	push	lr
+	and		r1, r0, r1				; r1 = pins_mask & value
+	ldr		r2, outport_img_address
+	ldrb	r3, [r2, #0]
+	mvn		r0, r0					; ~pins_mask
+	and		r3, r3, r0				; outport_img &= ~pins_mask;
+	orr		r0, r3, r1				; outport_img |= pins_mask & value;
+	strb	r0, [r2, #0]
+	bl		outport_write
+	pop		pc
+
+;---------------------------------------------------------------------------------	
+;void outport_write(uint8_t value) {
+;	outport_img = value;
+;	[OUTPORT_ADDRESS] = outport_img;
+;}
+;---------------------------------------------------------------------------------	
+; Rotina:    outport_write
+; Descricao: Atribui aos pinos do porto de saida o valor dos bits correspondentes de value.
+; Entradas:  Valor a escrever no porto
+; Saidas:    
+; Efeitos:   Atualiza o valor da variavel imagem do porto
+;---------------------------------------------------------------------------------	
+outport_write:
+	ldr		r1, outport_addr
+	strb	r0, [r1, #0]
+	mov		pc, lr
+
+outport_img_address:
+	.word	outport_img
+
+outport_addr:
+	.word	OUTPORT_ADDRESS
+	
+; Seccao:    .data
+; Descricao: Guarda as variáveis globais com valor inicial definido
+;
 	.data
-countdown_level:
+timer_level:
 	.word	0
-countdown_point:
+	
+timer_1s:
 	.word	0
+	
+current_lvl_dificult_in_time:
+	.word	20 
+	
 score:
 	.word	0
+<<<<<<< Updated upstream
 current_speed:
 	.word 0
 level_speed:
@@ -701,19 +1018,33 @@ racket_position:
 	.byte 0
 port_img:
 	.space	1
+=======
+	
+ticks:
+	.word	0		; uint16_t ticks;
+	
+ball_pos:
+	.byte	0x80
+	
+new_point_led:
+	.byte	0x00
+	
+direction: ; 0 away from player 1 into the player
+	.byte	0x00
+>>>>>>> Stashed changes
 sw_state:
 	.byte 	0
-led_new_point_state:
-	.byte 	0
+; Seccao:    .bss
+; Descricao: Guarda as variáveis globais sem valor inicial definido
+;
+	.section .bss
+outport_img:			; Imagem do porto de saida no programa
+	.space	1	
 
-addr_sys_clock:
-	.word	sys_clock
-
+; Seccao:    .stack
+; Descricao: Implementa a pilha com o tamanho definido pelo simbolo STACK_SIZE
+;
 	.section .stack
-	.space 1024
-stack_top:
-
-
-
-
-
+	.space STACK_SIZE
+tos:
+	
