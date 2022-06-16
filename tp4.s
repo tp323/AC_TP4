@@ -97,9 +97,8 @@ SYS_init:
 	strb r0, [r1]
 	
 	
-	mov r0, #1
-	mov r1, 0xE0
-	bl timer_write		
+	mov r0, #50
+	bl timer_init		
 	;bl timer_clearInterrupt	
 
 
@@ -338,7 +337,7 @@ init_timer_lvl:
 
 get_timer_lvl:
 	ldr r0, timer_level_adrrb
-	ldr r0, [r0, r0]
+	ldr r0, [r0]
 	mov pc, lr
 
 get_level_dif:
@@ -351,6 +350,7 @@ set_level_dif:
 	bl inport_read
 	mov r1, LEVEL_INPUT_MASK
 	and r0, r1, r0
+	lsr r0, r0, #6
 	mov r1, VARIANT_LEVEL
 	cmp r0, r1
 	beq set_level_dif //TODO
