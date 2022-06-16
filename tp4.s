@@ -37,7 +37,6 @@
 	.equ	LEVEL_INPUT_MASK, 0xc0
 	.equ	BALL_LEDS_MASK, 0xfe
 	.equ 	RAKET_MASK, 0x01
-	.equ 	LVL_MASK, 0xc0
 	.equ	VALU_OF_1S, 0x0c
 	.equ	VALU_OF_25, 0x03
 
@@ -199,8 +198,8 @@ skip_invert_dir:
 level_up_skip:	
 	;ball in wall ?
 
-	;bl mov_ball
-	;bl set_ball_leds
+;	bl mov_ball
+;	bl set_ball_leds
 
 	;ball in player? 
 	bl get_ball_position
@@ -395,8 +394,7 @@ score_addr_bb:
 ; Descricao: R
 ; Entradas:  -
 ; Saidas:    -
-; Efeitos:   Move bola em função de direção
-;			  Na direção do player ou da parede
+; Efeitos:   
 ; void mov_ball() {
 ;   
 ;}	
@@ -630,24 +628,15 @@ end_inport_test_bit:
 ;---------------------------------------------------------------------------------	
 inport_read:
 	ldr		r0, inport_address_local
-	ldrb	r0, [r0, #0]
-	mov		pc, lr
-
-;---------------------------------------------------------------------------------	
-; Rotina:    inport_read_with_mask
-; Descricao: Devolve o valor corrente do estado dos pinos do porto de entrada, em função da mascara passada
-; Entradas:  
-; Saidas:    Valor corrente do porto de entrada para a mascara
-; Efeitos:   
-;---------------------------------------------------------------------------------
-inport_read_with_mask:
-	ldr		r1, inport_address_local
-	ldrb	r1, [r1, #0]
-	and		r0, r0, r1
+	ldrb		r0, [r0, #0]
 	mov		pc, lr
 
 inport_address_local:
 	.word	INPORT_ADDRESS
+
+
+
+
 ;---------------------------------------------------------------------------------	
 ;uint8_t outport_init(uint8_t initial_value) {
 ;	outport_img = initial_value;
