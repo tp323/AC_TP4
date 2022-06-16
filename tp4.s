@@ -137,7 +137,8 @@ start_game:
 	bl mov_ball
 	bl set_ball_leds
 game_loop:
-
+	mov r0, RAKET_MASK
+	bl sw_is_pressed
 	ldr r1, timer_1s_adrrvv
 	ldr r0, [r1]
 	bl sysclk_elapsed
