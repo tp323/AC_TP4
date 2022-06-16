@@ -36,8 +36,8 @@
 	.equ 	NEW_POINT_LED_MASK, 0X1
 	.equ	BALL_LEDS_MASK, 0xfe
 	.equ 	RAKET_MASK, 0x01
-	.equ	VALU_OF_1S, 0xFF
-	.equ	VALU_OF_25, 0xEF
+	.equ	VALU_OF_1S, 0x0c
+	.equ	VALU_OF_25, 0x03
 ; Seccao:    .startup
 ; Descricao: Guarda o código de arranque do sistema
 ;
@@ -143,7 +143,7 @@ game_loop:
 	bl sysclk_elapsed
 	mov r1, VALU_OF_1S
 	cmp r0, r1 ;20
-	bhs one_second_pass_spik
+	blo one_second_pass_spik
 	bl one_second_pass
 one_second_pass_spik:	
 	ldr r0, new_point_led_addr
@@ -159,8 +159,9 @@ one_second_pass_spik:
 	blo	time_lvl	
 	mov r0, 0
 	bl set_led_newpoint
-timer_1s_adrrvv:
-	.word 	timer_1s	
+	
+
+	
 time_lvl:	
 	ldr r1, timer_level_adrr
 	ldr r0, [r1]
@@ -177,12 +178,6 @@ time_lvl:
 	bzc game_over_skip
 	b game_over
 game_over_skip:
-	bl mov_ball
-	bl set_ball_leds
-	bl init_timer_lvl
-	
-level_up_skip:	
-	;ball in wall ?
 	ldr r0, ball_pos_addrb
 	ldrb r0, [r0]
 	;mov r2, WALL_MASK
@@ -190,6 +185,16 @@ level_up_skip:
 	bzc skip_invert_dir
 	bl invert_dir
 skip_invert_dir:
+	bl mov_ball
+	bl set_ball_leds
+	bl init_timer_lvl
+	
+level_up_skip:	
+	;ball in wall ?
+
+;	bl mov_ball
+;	bl set_ball_leds
+
 	;ball in player? 
 	ldr r0, ball_pos_addrb
 	ldrb r0, [r0]
@@ -213,7 +218,8 @@ game_over:
 	bl invert_dir
 	b  main_while 	
 	
-	
+timer_1s_adrrvv:
+	.word 	timer_1s		
 	
 	
 invert_dir:
@@ -274,6 +280,7 @@ set_led_newpoint:
 	mov r0, NEW_POINT_LED_MASK
 	bl	outport_write_bits
 	pop pc
+	
 new_point_led_addrbbb:
 		.word	new_point_led
 
@@ -315,11 +322,13 @@ ball_pos_addr:
 
 	
 add_score:	
+	push lr
 	ldr r0, score_addr_bb
 	ldr r1, [r0]
 	add r1, r1, 1
 	str r1, [r0]
-	mov pc, lr
+	pop pc
+;	mov pc, lr
 	
 score_addr_bb:
 	.word score
