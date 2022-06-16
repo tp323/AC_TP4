@@ -34,10 +34,14 @@
 	.equ 	PLAYER_MASK, 0X80
 	.equ	WALL_MASK,   0X02
 	.equ 	NEW_POINT_LED_MASK, 0X1
+	.equ	LEVEL_INPUT_MASK, 0xc0
 	.equ	BALL_LEDS_MASK, 0xfe
 	.equ 	RAKET_MASK, 0x01
 	.equ	VALU_OF_1S, 0x0c
 	.equ	VALU_OF_25, 0x03
+
+	.equ	VARIANT_LEVEL, 3
+
 ; Seccao:    .startup
 ; Descricao: Guarda o código de arranque do sistema
 ;
@@ -130,30 +134,32 @@ wait_for_init_stroke:
 	add r0,r0,0
 	bzc start_game  
 	b    wait_for_init_stroke
-start_game:		
+	
+start_game:
+	bl set_level_dif
 	bl timer_start
 	bl init_timer_lvl
 	bl init_timer_1s
 	bl mov_ball
 	bl set_ball_leds
+
 game_loop:
 	mov r0, RAKET_MASK
 	bl sw_is_pressed
-	ldr r1, timer_1s_adrrvv
-	ldr r0, [r1]
+	bl get_timer_1s
 	bl sysclk_elapsed
 	mov r1, VALU_OF_1S
 	cmp r0, r1 ;20
 	blo one_second_pass_spik
 	bl one_second_pass
+
 one_second_pass_spik:	
 	ldr r0, new_point_led_addr
 	ldrb r0,[r0]
 	sub r0,r0,0
 	bzs time_lvl
 	
-	ldr r1, timer_1s_adrrvv
-	ldr r0, [r1]
+	bl get_timer_1s
 	bl sysclk_elapsed
 	mov r1, VALU_OF_25
 	cmp r0, r1 ;20
@@ -163,24 +169,23 @@ one_second_pass_spik:
 	
 
 	
-time_lvl:	
-	ldr r1, timer_level_adrr
-	ldr r0, [r1]
+time_lvl:
+
+	bl get_timer_lvl
 	bl sysclk_elapsed
-	mov r1, 0x0d ;TODO GET TIME OF LEVEL FROM A VAR-----------------
-	cmp r0, r1 ;20	
+	mov r1, r0
+	bl get_level_dif
+	cmp r1, r0
 	blo level_up_skip
 	
 	bl init_timer_lvl 
-	ldr r0, ball_pos_addrb
-	ldrb r0, [r0]
+	bl get_ball_position
 	mov r2, PLAYER_MASK
 	sub r0, r0, r2
 	bzc game_over_skip
 	b game_over
 game_over_skip:
-	ldr r0, ball_pos_addrb
-	ldrb r0, [r0]
+	bl get_ball_position
 	;mov r2, WALL_MASK
 	sub r0, r0, WALL_MASK
 	bzc skip_invert_dir
@@ -197,8 +202,7 @@ level_up_skip:
 ;	bl set_ball_leds
 
 	;ball in player? 
-	ldr r0, ball_pos_addrb
-	ldrb r0, [r0]
+	bl get_ball_position
 	mov r2, PLAYER_MASK
 	sub r0, r0, r2	
 	bzc game_loop
@@ -217,31 +221,15 @@ level_up_skip:
 	
 game_over:	
 	bl invert_dir
+	bl timer_stop
 	b  main_while 	
 	
 timer_1s_adrrvv:
-	.word 	timer_1s		
-	
-	
-invert_dir:
-	push lr
-	ldr r0, direction_addr
-	ldrb r1, [r0]
-	mov r2, 1
-	eor r1, r1, r2
-	strb r1, [r0]
-	pop pc
-	
-direction_addr:
-	.word	direction
-	
+	.word 	timer_1s
+
 new_point_led_addr:
 	.word 	new_point_led
-
-
 	
-	
-		
 score_addr:
 	.word 	score
 	
@@ -259,19 +247,12 @@ one_second_pass:
 timer_level_adrr:
 	.word timer_level
 
-set_ball_leds:
-	push lr	
-	ldr	r1, ball_pos_addrb
-	ldrb r1, [r1]
-	mov r0, BALL_LEDS_MASK
-	bl	outport_write_bits	
-	pop pc
+
 	
 timer_1s_adrr:
 	.word 	timer_1s	
 	
-ball_pos_addrb:
-	.word 	ball_pos	
+	
 ; set led new point to the valu of r0	
 set_led_newpoint:
 	push lr
@@ -286,36 +267,111 @@ new_point_led_addrbbb:
 		.word	new_point_led
 
 	
+
+/*
+	---------------------------------------	Ball Releated Functions ---------------------------------------
+*/
+
+set_ball_leds:
+	push lr	
+	ldr	r1, ball_pos_addrb
+	ldrb r1, [r1]
+	mov r0, BALL_LEDS_MASK
+	bl	outport_write_bits	
+	pop pc
+
+invert_dir:
+	push lr
+	ldr r0, direction_addr
+	ldrb r1, [r0]
+	mov r2, 1
+	eor r1, r1, r2
+	strb r1, [r0]
+	pop pc
+
+get_direction:
+	ldr r0, direction_addr
+	ldrb r0, [r0]
+	mov pc, lr
+
+get_ball_position:
+	ldr r0, ball_pos_addrb
+	ldrb r0, [r0]
+	mov pc, lr
+
+ball_pos_addrb:
+	.word 	ball_pos
+
+direction_addr:
+	.word	direction
+
+/*
+	---------------------------------------	1s Timer Releated Functions ---------------------------------------
+*/
+
 init_timer_1s:
 	push lr
 	bl sysclk_get_value	
 	ldr r1, timer_1s_adrrb
 	str r0, [r1]	
 	pop pc
+
+get_timer_1s:
+	ldr r0, timer_1s_adrrb
+	ldr r0, [r0, r0]
+	mov pc, lr
 	
 timer_1s_adrrb:
 	.word 	timer_1s	
-	
+
+/*
+	---------------------------------------	Level Releated Functions ---------------------------------------
+*/
+
 init_timer_lvl:
 	push lr
 	bl sysclk_get_value	
 	ldr r1, timer_level_adrrb
 	str r0, [r1]	
 	pop pc
-	
-	
 
+get_timer_lvl:
+	ldr r0, timer_level_adrrb
+	ldr r0, [r0, r0]
+	mov pc, lr
+
+get_level_dif:
+	ldr r0, current_lvl_addr
+	ldrb r0, [r0] 
+	mov pc, lr
+	
+set_level_dif:
+	push lr
+	bl inport_read
+	mov r1, LEVEL_INPUT_MASK
+	and r0, r1, r0
+	mov r1, VARIANT_LEVEL
+	cmp r0, r1
+	beq set_level_dif //TODO
+
+	ldr r1, lvl_list_addr
+	ldrb r0, [r1, r0]	//lvl_list + input lvl as offset
+	ldr r1, current_lvl_addr
+	strb r0, [r1]
+	pop pc
 
 timer_level_adrrb:
 	.word timer_level
 
+lvl_list_addr:
+	.word lvl_in_time
 
+current_lvl_addr:
+	.word current_lvl_dificult_in_time
 
-
-	
-
-
-
+/*
+	-------------------------------------------------------------------------------------------------------
+*/
 
 ball_pos_addr:
 	.word 	ball_pos
@@ -344,10 +400,9 @@ score_addr_bb:
 ;}	
 mov_ball:
 	push lr
-	ldr r0, ball_pos_addr_cc
-	ldrb r0, [r0]	
-	ldr r1, direction_addr_bb
-	ldrb r1, [r1]
+	bl get_direction
+	mov r1, r0
+	bl get_ball_position
 	mov r2, 1
 	and r1,r1,r2
 	sub r1, r1, 0	
@@ -713,8 +768,8 @@ timer_1s:
 	.word	0
 	
 current_lvl_dificult_in_time:
-	.word	20 
-	
+	.word	10
+
 score:
 	.word	0
 	
@@ -723,7 +778,9 @@ ticks:
 	
 ball_pos:
 	.byte	0x80
-	
+lvl_in_time:
+	.byte	100, 50, 25
+
 new_point_led:
 	.byte	0x00
 	
