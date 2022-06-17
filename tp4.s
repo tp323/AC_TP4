@@ -334,7 +334,7 @@ init_timer_1s:
 
 get_timer_1s:
 	ldr r0, timer_1s_adrrb
-	ldr r0, [r0, r0]
+	ldr r0, [r0]
 	mov pc, lr
 	
 timer_1s_adrrb:
@@ -831,7 +831,7 @@ ticks:
 ball_pos:
 	.byte	0x80
 lvl_in_time:
-	.byte	100, 50, 25
+	.byte	0x5c, 0x3c, 0x0c
 
 new_point_led:
 	.byte	0x00
