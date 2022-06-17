@@ -39,6 +39,7 @@
 	.equ 	RAKET_MASK, 0x01
 	.equ 	LVL_MASK, 0xc0
 	.equ	VALU_OF_1S, 0x0c
+	.equ	VALU_OF_5S, 0x3c
 	.equ	VALU_OF_25, 0x03
 
 	.equ	VARIANT_LEVEL, 3
@@ -219,8 +220,23 @@ level_up_skip:
 	
 	b game_loop
 	
-game_over:	
+game_over:
 	bl invert_dir
+	bl outport_clear_bits
+	bl get_score
+	bl outport_set_bits
+	bl init_timer_5s
+	mov r2, VALU_OF_5S
+	bl game_over_loop
+	;b .
+	
+;wait 5s
+game_over_loop:
+	;push lr
+	bl get_timer_5s
+	bl sysclk_elapsed
+	cmp r0, r2
+	blo game_over_loop
 	bl timer_stop
 	b  main_while 	
 	
@@ -322,8 +338,26 @@ get_timer_1s:
 	mov pc, lr
 	
 timer_1s_adrrb:
-	.word 	timer_1s	
+	.word 	timer_1s
 
+/*
+	---------------------------------------	5s Timer Releated Functions ---------------------------------------
+*/
+
+init_timer_5s:
+	push lr
+	bl sysclk_get_value	
+	ldr r1, timer_5s_adrrb
+	str r0, [r1]	
+	pop pc
+
+get_timer_5s:
+	ldr r0, timer_5s_adrrb
+	ldr r0, [r0, r0]
+	mov pc, lr
+	
+timer_5s_adrrb:
+	.word 	timer_5s
 /*
 	---------------------------------------	Level Releated Functions ---------------------------------------
 */
@@ -377,7 +411,11 @@ current_lvl_addr:
 ball_pos_addr:
 	.word 	ball_pos
 	
-
+get_score:
+	push lr
+	ldr r1, score_addr_bb
+	ldr r0, [r1]
+	pop pc
 	
 add_score:	
 	push lr
@@ -776,6 +814,9 @@ timer_level:
 	.word	0
 	
 timer_1s:
+	.word	0
+	
+timer_5s:
 	.word	0
 	
 current_lvl_dificult_in_time:
