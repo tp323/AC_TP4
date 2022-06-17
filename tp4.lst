@@ -1,81 +1,85 @@
-P16 assembler v1.3.2 (May  7 2020)	tp4.lst	Thu Jun 16 22:31:00 2022
+P16 assembler v1.3.2 (May  7 2020)	tp4.lst	Fri Jun 17 18:00:17 2022
 
 Sections
 Index   Name            Addresses       Size
 0       .startup        0000 - 000F     0010 16
-1       .text           0010 - 027B     026C 620
-2       .data           027C - 028C     0011 17
-3       .bss            028E - 028E     0001 1
-4       .stack          0290 - 02CF     0040 64
+1       .text           0010 - 02A7     0298 664
+2       .data           02A8 - 02BA     0013 19
+3       .bss            02BC - 02BC     0001 1
+4       .stack          02BE - 02FD     0040 64
 
 Symbols
 Name                    Type      Value      Section
 _start                  LABEL     0004 4     .startup
-add_score               LABEL     015E 350   .text
+add_score               LABEL     018A 394   .text
 BALL_LEDS_MASK          ABSOLUTE  00FE 254   .startup
-ball_pos                LABEL     0286 646   .data
-ball_pos_addr           LABEL     015C 348   .text
-ball_pos_addr_cc        LABEL     018A 394   .text
+ball_pos                LABEL     02B4 692   .data
+ball_pos_addr           LABEL     0180 384   .text
+ball_pos_addr_cc        LABEL     01B6 438   .text
 ball_pos_addr_ddd       LABEL     002E 46    .text
-ball_pos_addrb          LABEL     0110 272   .text
+ball_pos_addrb          LABEL     0122 290   .text
 CPSR_BIT_I              ABSOLUTE  0010 16    .startup
-current_lvl_addr        LABEL     015A 346   .text
-current_lvl_dificult_in_time LABEL     0280 640   .data
-direction               LABEL     028B 651   .data
-direction_addr          LABEL     0112 274   .text
-direction_addr_bb       LABEL     0188 392   .text
+current_lvl_addr        LABEL     017E 382   .text
+current_lvl_dificult_in_time LABEL     02AE 686   .data
+direction               LABEL     02B9 697   .data
+direction_addr          LABEL     0124 292   .text
+direction_addr_bb       LABEL     01B4 436   .text
 direction_addr_cc       LABEL     003E 62    .text
-end_inport_test_bit     LABEL     0220 544   .text
-end_inport_test_bit_1   LABEL     021E 542   .text
-finish_mov              LABEL     0182 386   .text
+end_inport_test_bit     LABEL     024C 588   .text
+end_inport_test_bit_1   LABEL     024A 586   .text
+finish_mov              LABEL     01AE 430   .text
 game_loop               LABEL     0058 88    .text
 game_over               LABEL     00BE 190   .text
+game_over_loop          LABEL     00CA 202   .text
 game_over_skip          LABEL     0096 150   .text
-get_ball_position       LABEL     010A 266   .text
-get_direction           LABEL     0104 260   .text
-get_level_dif           LABEL     0136 310   .text
-get_timer_1s            LABEL     011E 286   .text
-get_timer_lvl           LABEL     0130 304   .text
+get_ball_position       LABEL     011C 284   .text
+get_direction           LABEL     0116 278   .text
+get_level_dif           LABEL     015A 346   .text
+get_score               LABEL     0182 386   .text
+get_timer_1s            LABEL     0130 304   .text
+get_timer_5s            LABEL     0142 322   .text
+get_timer_lvl           LABEL     0154 340   .text
 IE_MASK                 ABSOLUTE  0010 16    .startup
-init_timer_1s           LABEL     0114 276   .text
-init_timer_lvl          LABEL     0126 294   .text
+init_timer_1s           LABEL     0126 294   .text
+init_timer_5s           LABEL     0138 312   .text
+init_timer_lvl          LABEL     014A 330   .text
 INPORT_ADDRESS          ABSOLUTE  FF00 65280 .startup
-inport_address_local    LABEL     0232 562   .text
-inport_read             LABEL     0224 548   .text
-inport_read_with_mask   LABEL     022A 554   .text
-inport_test_bits        LABEL     020C 524   .text
-invert_dir              LABEL     00F6 246   .text
-isr                     LABEL     018C 396   .text
+inport_address_local    LABEL     025E 606   .text
+inport_read             LABEL     0250 592   .text
+inport_read_with_mask   LABEL     0256 598   .text
+inport_test_bits        LABEL     0238 568   .text
+invert_dir              LABEL     0108 264   .text
+isr                     LABEL     01B8 440   .text
 isr_addr                LABEL     000E 14    .startup
 LED0_MASK               ABSOLUTE  0001 1     .startup
 LEVEL_INPUT_MASK        ABSOLUTE  00C0 192   .startup
 level_up_skip           LABEL     00A4 164   .text
-lvl_in_time             LABEL     0287 647   .data
-lvl_list_addr           LABEL     0158 344   .text
+lvl_in_time             LABEL     02B5 693   .data
+lvl_list_addr           LABEL     017C 380   .text
 LVL_MASK                ABSOLUTE  00C0 192   .startup
 main                    LABEL     0032 50    .text
 main_addr               LABEL     000C 12    .startup
 main_while              LABEL     0040 64    .text
-mov_away                LABEL     0180 384   .text
-mov_ball                LABEL     016C 364   .text
-new_point_led           LABEL     028A 650   .data
-new_point_led_addr      LABEL     00C6 198   .text
-new_point_led_addrbbb   LABEL     00E8 232   .text
+mov_away                LABEL     01AC 428   .text
+mov_ball                LABEL     0198 408   .text
+new_point_led           LABEL     02B8 696   .data
+new_point_led_addr      LABEL     00D8 216   .text
+new_point_led_addrbbb   LABEL     00FA 250   .text
 NEW_POINT_LED_MASK      ABSOLUTE  0001 1     .startup
-one_second_pass         LABEL     00CA 202   .text
+one_second_pass         LABEL     00DC 220   .text
 one_second_pass_spik    LABEL     0068 104   .text
-outport_addr            LABEL     027A 634   .text
+outport_addr            LABEL     02A6 678   .text
 OUTPORT_ADDRESS         ABSOLUTE  FF00 65280 .startup
-outport_clear_bits      LABEL     024E 590   .text
-outport_img             LABEL     028E 654   .bss
-outport_img_address     LABEL     0278 632   .text
-outport_init            LABEL     0234 564   .text
+outport_clear_bits      LABEL     027A 634   .text
+outport_img             LABEL     02BC 700   .bss
+outport_img_address     LABEL     02A4 676   .text
+outport_init            LABEL     0260 608   .text
 OUTPORT_INIT_VALUE      ABSOLUTE  0000 0     .startup
-outport_set_bits        LABEL     0240 576   .text
-outport_write           LABEL     0272 626   .text
-outport_write_bits      LABEL     025E 606   .text
+outport_set_bits        LABEL     026C 620   .text
+outport_write           LABEL     029E 670   .text
+outport_write_bits      LABEL     028A 650   .text
 PLAYER_MASK             ABSOLUTE  0080 128   .startup
-ptc_addr                LABEL     01EE 494   .text
+ptc_addr                LABEL     021A 538   .text
 pTC_ADDRESS             ABSOLUTE  FF40 65344 .startup
 pTC_CMD_START           ABSOLUTE  0000 0     .startup
 pTC_CMD_STOP            ABSOLUTE  0001 1     .startup
@@ -83,47 +87,51 @@ pTC_TC                  ABSOLUTE  0004 4     .startup
 pTC_TCR                 ABSOLUTE  0000 0     .startup
 pTC_TIR                 ABSOLUTE  0006 6     .startup
 pTC_TMR                 ABSOLUTE  0002 2     .startup
+PTC_VALUE               ABSOLUTE  0032 50    .startup
 RAKET_MASK              ABSOLUTE  0001 1     .startup
-score                   LABEL     0282 642   .data
-score_addr              LABEL     00C8 200   .text
-score_addr_bb           LABEL     016A 362   .text
-set_ball_leds           LABEL     00EA 234   .text
-set_led_newpoint        LABEL     00DA 218   .text
-set_level_dif           LABEL     013C 316   .text
+score                   LABEL     02B0 688   .data
+score_addr              LABEL     00DA 218   .text
+score_addr_bb           LABEL     0196 406   .text
+set_ball_leds           LABEL     00FC 252   .text
+set_led_newpoint        LABEL     00EC 236   .text
+set_level_dif           LABEL     0160 352   .text
 skip_invert_dir         LABEL     009E 158   .text
 STACK_SIZE              ABSOLUTE  0040 64    .startup
 start_game              LABEL     004C 76    .text
-sw_is_pressed           LABEL     01F0 496   .text
-sw_is_pressed_0         LABEL     0206 518   .text
-sw_is_pressed_1         LABEL     0208 520   .text
-sw_state                LABEL     028C 652   .data
-sw_state_address        LABEL     020A 522   .text
+sw_is_pressed           LABEL     021C 540   .text
+sw_is_pressed_0         LABEL     0232 562   .text
+sw_is_pressed_1         LABEL     0234 564   .text
+sw_state                LABEL     02BA 698   .data
+sw_state_address        LABEL     0236 566   .text
 SYS_init                LABEL     0010 16    .text
-sysclk_elapsed          LABEL     01B8 440   .text
+sysclk_elapsed          LABEL     01E4 484   .text
 SYSCLK_FREQ             ABSOLUTE  0005 5     .startup
-sysclk_get_value        LABEL     01B2 434   .text
-ticks                   LABEL     0284 644   .data
-ticks_addr              LABEL     01C0 448   .text
+sysclk_get_value        LABEL     01DE 478   .text
+ticks                   LABEL     02B2 690   .data
+ticks_addr              LABEL     01EC 492   .text
 ticks_addrb             LABEL     0030 48    .text
 time_lvl                LABEL     007E 126   .text
-timer_1s                LABEL     027E 638   .data
-timer_1s_adrr           LABEL     00D8 216   .text
-timer_1s_adrrb          LABEL     0124 292   .text
-timer_1s_adrrvv         LABEL     00C4 196   .text
-timer_addressr          LABEL     01B0 432   .text
-timer_addressrc         LABEL     01D2 466   .text
-timer_clearInterrupt    LABEL     01A8 424   .text
-timer_init              LABEL     01DC 476   .text
-timer_level             LABEL     027C 636   .data
-timer_level_adrr        LABEL     00D6 214   .text
-timer_level_adrrb       LABEL     0156 342   .text
-timer_start             LABEL     01C2 450   .text
-timer_stop              LABEL     01D4 468   .text
-timer_write             LABEL     01CA 458   .text
-tos                     LABEL     02D0 720   .stack
+timer_1s                LABEL     02AA 682   .data
+timer_1s_adrr           LABEL     00EA 234   .text
+timer_1s_adrrb          LABEL     0136 310   .text
+timer_1s_adrrvv         LABEL     00D6 214   .text
+timer_5s                LABEL     02AC 684   .data
+timer_5s_adrrb          LABEL     0148 328   .text
+timer_addressr          LABEL     01DC 476   .text
+timer_addressrc         LABEL     01FE 510   .text
+timer_clearInterrupt    LABEL     01D4 468   .text
+timer_init              LABEL     0208 520   .text
+timer_level             LABEL     02A8 680   .data
+timer_level_adrr        LABEL     00E8 232   .text
+timer_level_adrrb       LABEL     017A 378   .text
+timer_start             LABEL     01EE 494   .text
+timer_stop              LABEL     0200 512   .text
+timer_write             LABEL     01F6 502   .text
+tos                     LABEL     02FE 766   .stack
 tos_addr                LABEL     000A 10    .startup
 VALU_OF_1S              ABSOLUTE  000C 12    .startup
 VALU_OF_25              ABSOLUTE  0003 3     .startup
+VALU_OF_5S              ABSOLUTE  003C 60    .startup
 VARIANT_LEVEL           ABSOLUTE  0003 3     .startup
 wait_for_init_stroke    LABEL     0042 66    .text
 WALL_MASK               ABSOLUTE  0002 2     .startup
@@ -137,17 +145,17 @@ Code listing
    6           	
    7           	; Definicao dos valores dos simbolos utilizados no programa
    8           	;
-   9          		.equ	STACK_SIZE, 64             ; Dimensao do stack (em bytes)
+   9          		.equ	STACK_SIZE, 64           ; Dimensao do stack (em bytes)
   10           	
   11          		.equ    INPORT_ADDRESS, 0xFF00  ; Endereço do porto de entrada da placa SDP16
   12          		.equ	OUTPORT_ADDRESS, 0xFF00 ; Endereço do porto de saida da placa SDP16
   13           	
   14          		.equ	CPSR_BIT_I, 0x10          ; Mascara para a flag I do registo CPSR
-  15           	
+  15          		.equ	PTC_VALUE, 50
   16          		.equ	SYSCLK_FREQ, 0x5          ; Intervalo de contagem do circuito pTC
-  17           	                                          ; que suporta a implementação do sysclk
-  18           											  ; fin_pTC = 10Hz fout_ptc=2Hz => T=500ms 
-  19           											  ; TMR = 10Hz/2Hz = 5
+  17           	                                        ; que suporta a implementação do sysclk
+  18           											; fin_pTC = 10Hz fout_ptc=2Hz => T=500ms 
+  19           											; TMR = 10Hz/2Hz = 5
   20          		.equ 	LED0_MASK, 0x01
   21          		.equ 	OUTPORT_INIT_VALUE, 0x00
   22           	
@@ -170,779 +178,818 @@ Code listing
   39          		.equ 	RAKET_MASK, 0x01
   40          		.equ 	LVL_MASK, 0xc0
   41          		.equ	VALU_OF_1S, 0x0c
-  42          		.equ	VALU_OF_25, 0x03
-  43           	
-  44          		.equ	VARIANT_LEVEL, 3
-  45           	
-  46           	; Seccao:    .startup
-  47           	; Descricao: Guarda o código de arranque do sistema
-  48           	;
-  49           		.section .startup
-  50 0000 01 58		b 	_start
-  51 0002 5F 0C		ldr	pc, isr_addr
-  52           	
-  53           	_start:
-  54 0004 2D 0C		ldr sp, tos_addr
-  55 0006 04 5C		bl SYS_init
-  56 0008 1F 0C		ldr	pc, main_addr
-  57           	
-  58           	tos_addr:
-  59 000A D0 02		.word	tos
-  60           	main_addr:
-  61 000C 32 00		.word	main
-  62           	isr_addr:
-  63 000E 8C 01		.word	isr
-  64           		
-  65           	;----------------------------------------	
-  66           	;# define OUTPORT_INIT_VALUE 0
-  67           	;# define LED0_MASK 1
-  68           	;
-  69           	;uint16_t ticks = 0;
-  70           	; 
-  71           	;void main() {
-  72           	;uint16_t t;
-  73           	;	outport_init ( OUTPORT_INIT_VALUE );
-  74           	;	timer_init ( SYSCLK_FREQ );
-  75           	;   //Habilitar o atendimento das interrupcoes
-  76           	;   while(1) {
-  77           	;		outport_set_bits(LED0_MASK);
-  78           	;		t = sysclk_get_value ();
-  79           	;		while ( sysclk_elapsed ( t ) < LED_TOGGLE_TIME );
-  80           	;		outport_clear_bits(LED0_MASK);
-  81           	;		t = sysclk_get_value ();
-  82           	;		while ( sysclk_elapsed ( t ) < LED_TOGGLE_TIME );
-  83           	;   }
-  84           	;}
-  85           	;----------------------------------------	
-  86           		.text
-  87           	SYS_init:
-  88 0010 0E 24		push lr
-  89 0012 10 5D		bl outport_init		
-  90 0014 DF 5C		bl timer_stop
-  91 0016 C0 0C		ldr		r0, ticks_addrb
-  92 0018 01 00		ldr		r1, [r0, #0]
-  93 001A 01 60		mov		r1,  #0
-  94 001C 01 20		str		r1, [r0, #0]
-  95 001E 00 68		mov r0, 0x80
-  96 0020 61 0C		ldr r1, ball_pos_addr_ddd
-  97 0022 10 28		strb r0, [r1]
-  98           		
+  42          		.equ	VALU_OF_5S, 0x3c
+  43          		.equ	VALU_OF_25, 0x03
+  44           	
+  45          		.equ	VARIANT_LEVEL, 3
+  46           	
+  47           	; Seccao:    .startup
+  48           	; Descricao: Guarda o código de arranque do sistema
+  49           	;
+  50           		.section .startup
+  51 0000 01 58		b 	_start
+  52 0002 5F 0C		ldr	pc, isr_addr
+  53           	
+  54           	_start:
+  55 0004 2D 0C		ldr sp, tos_addr
+  56 0006 04 5C		bl SYS_init
+  57 0008 1F 0C		ldr	pc, main_addr
+  58           	
+  59           	tos_addr:
+  60 000A FE 02		.word	tos
+  61           	main_addr:
+  62 000C 32 00		.word	main
+  63           	isr_addr:
+  64 000E B8 01		.word	isr
+  65           		
+  66           	;----------------------------------------	
+  67           	;# define OUTPORT_INIT_VALUE 0
+  68           	;# define LED0_MASK 1
+  69           	;
+  70           	;uint16_t ticks = 0;
+  71           	; 
+  72           	;void main() {
+  73           	;uint16_t t;
+  74           	;	outport_init ( OUTPORT_INIT_VALUE );
+  75           	;	timer_init ( SYSCLK_FREQ );
+  76           	;   //Habilitar o atendimento das interrupcoes
+  77           	;   while(1) {
+  78           	;		outport_set_bits(LED0_MASK);
+  79           	;		t = sysclk_get_value ();
+  80           	;		while ( sysclk_elapsed ( t ) < LED_TOGGLE_TIME );
+  81           	;		outport_clear_bits(LED0_MASK);
+  82           	;		t = sysclk_get_value ();
+  83           	;		while ( sysclk_elapsed ( t ) < LED_TOGGLE_TIME );
+  84           	;   }
+  85           	;}
+  86           	;----------------------------------------	
+  87           		.text
+  88           	SYS_init:
+  89 0010 0E 24		push lr
+  90 0012 26 5D		bl outport_init		
+  91 0014 F5 5C		bl timer_stop
+  92 0016 C0 0C		ldr		r0, ticks_addrb
+  93 0018 01 00		ldr		r1, [r0, #0]
+  94 001A 01 60		mov		r1,  #0
+  95 001C 01 20		str		r1, [r0, #0]
+  96 001E 00 68		mov r0, 0x80
+  97 0020 61 0C		ldr r1, ball_pos_addr_ddd
+  98 0022 10 28		strb r0, [r1]
   99           		
- 100 0024 20 63		mov r0, #50
- 101 0026 DA 5C		bl timer_init		
- 102           		;bl timer_clearInterrupt	
- 103           	
+ 100           		
+ 101 0024 20 63		mov r0, PTC_VALUE
+ 102 0026 F0 5C		bl timer_init		
+ 103           		;bl timer_clearInterrupt	
  104           	
  105           	
- 106 0028 00 61		mov r0, IE_MASK
- 107           	
- 108 002A 40 B0		msr cpsr, r0	
- 109 002C 0F 04		pop pc	
- 110           		
- 111           	ball_pos_addr_ddd:
- 112 002E 86 02		.word 	ball_pos	
- 113           		
- 114           	ticks_addrb:
- 115 0030 84 02		.word ticks
- 116           	
- 117           	main:
- 118 0032 0E 24		push lr	
- 119 0034 CF 5C		bl timer_stop
- 120 0036 30 0C		ldr r0, direction_addr_cc
- 121 0038 01 60		mov r1, 0
- 122 003A 01 28		strb r1, [r0]
- 123 003C 01 58		b main_while
- 124           		
- 125           	direction_addr_cc:
- 126 003E 8B 02		.word	direction
- 127           		
- 128           	main_while:
- 129 0040 54 5C		bl set_ball_leds
- 130           		
- 131           	wait_for_init_stroke:
- 132 0042 10 60		mov r0, RAKET_MASK
- 133 0044 D5 5C		bl sw_is_pressed
- 134 0046 00 A0		add r0,r0,0
- 135 0048 01 44		bzc start_game  
- 136 004A FB 5B		b    wait_for_init_stroke
- 137           		
- 138           	start_game:
- 139 004C 77 5C		bl set_level_dif
- 140 004E B9 5C		bl timer_start
- 141 0050 6A 5C		bl init_timer_lvl
- 142 0052 60 5C		bl init_timer_1s
- 143 0054 8B 5C		bl mov_ball
- 144 0056 49 5C		bl set_ball_leds
- 145           	
- 146           	game_loop:
- 147 0058 10 60		mov r0, RAKET_MASK
- 148 005A CA 5C		bl sw_is_pressed
- 149 005C 60 5C		bl get_timer_1s
- 150 005E AC 5C		bl sysclk_elapsed
- 151 0060 C1 60		mov r1, VALU_OF_1S
- 152 0062 80 B8		cmp r0, r1 ;20
- 153 0064 01 48		blo one_second_pass_spik
- 154 0066 31 5C		bl one_second_pass
- 155           	
- 156           	one_second_pass_spik:	
- 157 0068 E0 0E		ldr r0, new_point_led_addr
- 158 006A 00 08		ldrb r0,[r0]
- 159 006C 00 A8		sub r0,r0,0
- 160 006E 07 40		bzs time_lvl
- 161           		
- 162 0070 56 5C		bl get_timer_1s
- 163 0072 A2 5C		bl sysclk_elapsed
- 164 0074 31 60		mov r1, VALU_OF_25
- 165 0076 80 B8		cmp r0, r1 ;20
- 166 0078 02 48		blo	time_lvl	
- 167 007A 00 60		mov r0, 0
- 168 007C 2E 5C		bl set_led_newpoint
- 169           		
- 170           	
- 171           		
- 172           	time_lvl:
- 173           	
- 174 007E 58 5C		bl get_timer_lvl
- 175 0080 9B 5C		bl sysclk_elapsed
- 176 0082 01 B0		mov r1, r0
- 177 0084 58 5C		bl get_level_dif
- 178 0086 10 B8		cmp r1, r0
- 179 0088 0D 48		blo level_up_skip
- 180           		
- 181 008A 4D 5C		bl init_timer_lvl 
- 182 008C 3E 5C		bl get_ball_position
- 183 008E 02 68		mov r2, PLAYER_MASK
- 184 0090 00 89		sub r0, r0, r2
- 185 0092 01 44		bzc game_over_skip
- 186 0094 14 58		b game_over
- 187           	game_over_skip:
- 188 0096 39 5C		bl get_ball_position
- 189           		;mov r2, WALL_MASK
- 190 0098 00 A9		sub r0, r0, WALL_MASK
- 191 009A 01 44		bzc skip_invert_dir
- 192 009C 2C 5C		bl invert_dir
- 193           	skip_invert_dir:
- 194 009E 66 5C		bl mov_ball
- 195 00A0 24 5C		bl set_ball_leds
- 196 00A2 41 5C		bl init_timer_lvl
- 197           		
- 198           	level_up_skip:	
- 199           		;ball in wall ?
- 200           	
- 201           		;bl mov_ball
- 202           		;bl set_ball_leds
- 203           	
- 204           		;ball in player? 
- 205 00A4 32 5C		bl get_ball_position
- 206 00A6 02 68		mov r2, PLAYER_MASK
- 207 00A8 00 89		sub r0, r0, r2	
- 208 00AA D6 47		bzc game_loop
- 209           		;raket? 
- 210 00AC 10 60		mov r0, RAKET_MASK
- 211 00AE A0 5C		bl sw_is_pressed
- 212 00B0 00 A0		add r0,r0,0
- 213 00B2 D2 43		bzs  game_loop
- 214           		
- 215 00B4 20 5C		bl invert_dir
- 216 00B6 37 5C		bl init_timer_lvl	
- 217 00B8 59 5C		bl mov_ball
- 218 00BA 17 5C		bl set_ball_leds
- 219           		
- 220 00BC CD 5B		b game_loop
- 221           		
- 222           	game_over:	
- 223 00BE 1B 5C		bl invert_dir
- 224 00C0 89 5C		bl timer_stop
- 225 00C2 BE 5B		b  main_while 	
- 226           		
- 227           	timer_1s_adrrvv:
- 228 00C4 7E 02		.word 	timer_1s
- 229           	
- 230           	new_point_led_addr:
- 231 00C6 8A 02		.word 	new_point_led
- 232           		
- 233           	score_addr:
- 234 00C8 82 02		.word 	score
- 235           		
- 236           	one_second_pass:
- 237           		;SCORE ++
- 238           		;LED ON NEW POINT
- 239           		;INIT TIMER
- 240 00CA 0E 24		push lr
- 241 00CC 23 5C		bl init_timer_1s
- 242 00CE 10 60		mov r0, 1
- 243 00D0 04 5C		bl set_led_newpoint
- 244 00D2 45 5C		bl add_score
- 245 00D4 0F 04		pop pc
+ 106           	
+ 107 0028 00 61		mov r0, IE_MASK
+ 108           	
+ 109 002A 40 B0		msr cpsr, r0	
+ 110 002C 0F 04		pop pc	
+ 111           		
+ 112           	ball_pos_addr_ddd:
+ 113 002E B4 02		.word 	ball_pos	
+ 114           		
+ 115           	ticks_addrb:
+ 116 0030 B2 02		.word ticks
+ 117           	
+ 118           	main:
+ 119 0032 0E 24		push lr	
+ 120 0034 E5 5C		bl timer_stop
+ 121 0036 30 0C		ldr r0, direction_addr_cc
+ 122 0038 01 60		mov r1, 0
+ 123 003A 01 28		strb r1, [r0]
+ 124 003C 01 58		b main_while
+ 125           		
+ 126           	direction_addr_cc:
+ 127 003E B9 02		.word	direction
+ 128           		
+ 129           	main_while:
+ 130 0040 5D 5C		bl set_ball_leds
+ 131           		
+ 132           	wait_for_init_stroke:
+ 133 0042 10 60		mov r0, RAKET_MASK
+ 134 0044 EB 5C		bl sw_is_pressed
+ 135 0046 00 A0		add r0,r0,0
+ 136 0048 01 44		bzc start_game  
+ 137 004A FB 5B		b    wait_for_init_stroke
+ 138           		
+ 139           	start_game:
+ 140 004C 89 5C		bl set_level_dif
+ 141 004E CF 5C		bl timer_start
+ 142 0050 7C 5C		bl init_timer_lvl
+ 143 0052 69 5C		bl init_timer_1s
+ 144 0054 A1 5C		bl mov_ball
+ 145 0056 52 5C		bl set_ball_leds
+ 146           	
+ 147           	game_loop:
+ 148 0058 10 60		mov r0, RAKET_MASK
+ 149 005A E0 5C		bl sw_is_pressed
+ 150 005C 69 5C		bl get_timer_1s
+ 151 005E C2 5C		bl sysclk_elapsed
+ 152 0060 C1 60		mov r1, VALU_OF_1S
+ 153 0062 80 B8		cmp r0, r1 ;20
+ 154 0064 01 48		blo one_second_pass_spik
+ 155 0066 3A 5C		bl one_second_pass
+ 156           	
+ 157           	one_second_pass_spik:	
+ 158 0068 70 0F		ldr r0, new_point_led_addr
+ 159 006A 00 08		ldrb r0,[r0]
+ 160 006C 00 A8		sub r0,r0,0
+ 161 006E 07 40		bzs time_lvl
+ 162           		
+ 163 0070 5F 5C		bl get_timer_1s
+ 164 0072 B8 5C		bl sysclk_elapsed
+ 165 0074 31 60		mov r1, VALU_OF_25
+ 166 0076 80 B8		cmp r0, r1 ;20
+ 167 0078 02 48		blo	time_lvl	
+ 168 007A 00 60		mov r0, 0
+ 169 007C 37 5C		bl set_led_newpoint
+ 170           		
+ 171           	
+ 172           		
+ 173           	time_lvl:
+ 174           	
+ 175 007E 6A 5C		bl get_timer_lvl
+ 176 0080 B1 5C		bl sysclk_elapsed
+ 177 0082 01 B0		mov r1, r0
+ 178 0084 6A 5C		bl get_level_dif
+ 179 0086 10 B8		cmp r1, r0
+ 180 0088 0D 48		blo level_up_skip
+ 181           		
+ 182 008A 5F 5C		bl init_timer_lvl 
+ 183 008C 47 5C		bl get_ball_position
+ 184 008E 02 68		mov r2, PLAYER_MASK
+ 185 0090 00 89		sub r0, r0, r2
+ 186 0092 01 44		bzc game_over_skip
+ 187 0094 14 58		b game_over
+ 188           	game_over_skip:
+ 189 0096 42 5C		bl get_ball_position
+ 190           		;mov r2, WALL_MASK
+ 191 0098 00 A9		sub r0, r0, WALL_MASK
+ 192 009A 01 44		bzc skip_invert_dir
+ 193 009C 35 5C		bl invert_dir
+ 194           	skip_invert_dir:
+ 195 009E 7C 5C		bl mov_ball
+ 196 00A0 2D 5C		bl set_ball_leds
+ 197 00A2 53 5C		bl init_timer_lvl
+ 198           		
+ 199           	level_up_skip:	
+ 200           		;ball in wall ?
+ 201           	
+ 202           		;bl mov_ball
+ 203           		;bl set_ball_leds
+ 204           	
+ 205           		;ball in player? 
+ 206 00A4 3B 5C		bl get_ball_position
+ 207 00A6 02 68		mov r2, PLAYER_MASK
+ 208 00A8 00 89		sub r0, r0, r2	
+ 209 00AA D6 47		bzc game_loop
+ 210           		;raket? 
+ 211 00AC 10 60		mov r0, RAKET_MASK
+ 212 00AE B6 5C		bl sw_is_pressed
+ 213 00B0 00 A0		add r0,r0,0
+ 214 00B2 D2 43		bzs  game_loop
+ 215           		
+ 216 00B4 29 5C		bl invert_dir
+ 217 00B6 49 5C		bl init_timer_lvl	
+ 218 00B8 6F 5C		bl mov_ball
+ 219 00BA 20 5C		bl set_ball_leds
+ 220           		
+ 221 00BC CD 5B		b game_loop
+ 222           		
+ 223           	game_over:
+ 224 00BE 24 5C		bl invert_dir
+ 225 00C0 DC 5C		bl outport_clear_bits
+ 226 00C2 5F 5C		bl get_score
+ 227 00C4 D3 5C		bl outport_set_bits
+ 228 00C6 38 5C		bl init_timer_5s
+ 229 00C8 C4 63		mov r4, VALU_OF_5S
+ 230           		
+ 231           	;wait 5s
+ 232           	game_over_loop:
+ 233           		;push lr
+ 234 00CA 3B 5C		bl get_timer_5s
+ 235 00CC 8B 5C		bl sysclk_elapsed
+ 236 00CE 00 BA		cmp r0, r4
+ 237 00D0 FC 4B		blo game_over_loop
+ 238 00D2 96 5C		bl timer_stop
+ 239 00D4 B5 5B		b  main_while 	
+ 240           		
+ 241           	timer_1s_adrrvv:
+ 242 00D6 AA 02		.word 	timer_1s
+ 243           	
+ 244           	new_point_led_addr:
+ 245 00D8 B8 02		.word 	new_point_led
  246           		
- 247           	timer_level_adrr:
- 248 00D6 7C 02		.word timer_level
- 249           	
- 250           	
- 251           		
- 252           	timer_1s_adrr:
- 253 00D8 7E 02		.word 	timer_1s	
- 254           		
- 255           		
- 256           	; set led new point to the valu of r0	
- 257           	set_led_newpoint:
- 258 00DA 0E 24		push lr
- 259 00DC 51 0C		ldr r1, new_point_led_addrbbb
- 260 00DE 10 28		strb r0, [r1]
- 261 00E0 01 B0		mov r1,r0
- 262 00E2 10 60		mov r0, NEW_POINT_LED_MASK
- 263 00E4 BC 5C		bl	outport_write_bits
- 264 00E6 0F 04		pop pc
+ 247           	score_addr:
+ 248 00DA B0 02		.word 	score
+ 249           		
+ 250           	one_second_pass:
+ 251           		;SCORE ++
+ 252           		;LED ON NEW POINT
+ 253           		;INIT TIMER
+ 254 00DC 0E 24		push lr
+ 255 00DE 23 5C		bl init_timer_1s
+ 256 00E0 10 60		mov r0, 1
+ 257 00E2 04 5C		bl set_led_newpoint
+ 258 00E4 52 5C		bl add_score
+ 259 00E6 0F 04		pop pc
+ 260           		
+ 261           	timer_level_adrr:
+ 262 00E8 A8 02		.word timer_level
+ 263           	
+ 264           	
  265           		
- 266           	new_point_led_addrbbb:
- 267 00E8 8A 02			.word	new_point_led
- 268           	
+ 266           	timer_1s_adrr:
+ 267 00EA AA 02		.word 	timer_1s	
+ 268           		
  269           		
- 270           	
- 271           	/*
- 272           		---------------------------------------	Ball Releated Functions ---------------------------------------
- 273           	*/
- 274           	
- 275           	set_ball_leds:
- 276 00EA 0E 24		push lr	
- 277 00EC 11 0D		ldr	r1, ball_pos_addrb
- 278 00EE 11 08		ldrb r1, [r1]
- 279 00F0 E0 6F		mov r0, BALL_LEDS_MASK
- 280 00F2 B5 5C		bl	outport_write_bits	
- 281 00F4 0F 04		pop pc
+ 270           	; set led new point to the valu of r0	
+ 271           	set_led_newpoint:
+ 272 00EC 0E 24		push lr
+ 273 00EE 51 0C		ldr r1, new_point_led_addrbbb
+ 274 00F0 10 28		strb r0, [r1]
+ 275 00F2 01 B0		mov r1,r0
+ 276 00F4 10 60		mov r0, NEW_POINT_LED_MASK
+ 277 00F6 C9 5C		bl	outport_write_bits
+ 278 00F8 0F 04		pop pc
+ 279           		
+ 280           	new_point_led_addrbbb:
+ 281 00FA B8 02			.word	new_point_led
  282           	
- 283           	invert_dir:
- 284 00F6 0E 24		push lr
- 285 00F8 C0 0C		ldr r0, direction_addr
- 286 00FA 01 08		ldrb r1, [r0]
- 287 00FC 12 60		mov r2, 1
- 288 00FE 11 D1		eor r1, r1, r2
- 289 0100 01 28		strb r1, [r0]
- 290 0102 0F 04		pop pc
- 291           	
- 292           	get_direction:
- 293 0104 60 0C		ldr r0, direction_addr
- 294 0106 00 08		ldrb r0, [r0]
- 295 0108 0F B7		mov pc, lr
+ 283           		
+ 284           	
+ 285           	/*
+ 286           		---------------------------------------	Ball Releated Functions ---------------------------------------
+ 287           	*/
+ 288           	
+ 289           	set_ball_leds:
+ 290 00FC 0E 24		push lr	
+ 291 00FE 11 0D		ldr	r1, ball_pos_addrb
+ 292 0100 11 08		ldrb r1, [r1]
+ 293 0102 E0 6F		mov r0, BALL_LEDS_MASK
+ 294 0104 C2 5C		bl	outport_write_bits	
+ 295 0106 0F 04		pop pc
  296           	
- 297           	get_ball_position:
- 298 010A 20 0C		ldr r0, ball_pos_addrb
- 299 010C 00 08		ldrb r0, [r0]
- 300 010E 0F B7		mov pc, lr
- 301           	
- 302           	ball_pos_addrb:
- 303 0110 86 02		.word 	ball_pos
- 304           	
- 305           	direction_addr:
- 306 0112 8B 02		.word	direction
- 307           	
- 308           	/*
- 309           		---------------------------------------	1s Timer Releated Functions ---------------------------------------
- 310           	*/
- 311           	
- 312           	init_timer_1s:
- 313 0114 0E 24		push lr
- 314 0116 4D 5C		bl sysclk_get_value	
- 315 0118 51 0C		ldr r1, timer_1s_adrrb
- 316 011A 10 20		str r0, [r1]	
- 317 011C 0F 04		pop pc
+ 297           	invert_dir:
+ 298 0108 0E 24		push lr
+ 299 010A C0 0C		ldr r0, direction_addr
+ 300 010C 01 08		ldrb r1, [r0]
+ 301 010E 12 60		mov r2, 1
+ 302 0110 11 D1		eor r1, r1, r2
+ 303 0112 01 28		strb r1, [r0]
+ 304 0114 0F 04		pop pc
+ 305           	
+ 306           	get_direction:
+ 307 0116 60 0C		ldr r0, direction_addr
+ 308 0118 00 08		ldrb r0, [r0]
+ 309 011A 0F B7		mov pc, lr
+ 310           	
+ 311           	get_ball_position:
+ 312 011C 20 0C		ldr r0, ball_pos_addrb
+ 313 011E 00 08		ldrb r0, [r0]
+ 314 0120 0F B7		mov pc, lr
+ 315           	
+ 316           	ball_pos_addrb:
+ 317 0122 B4 02		.word 	ball_pos
  318           	
- 319           	get_timer_1s:
- 320 011E 20 0C		ldr r0, timer_1s_adrrb
- 321 0120 00 10		ldr r0, [r0, r0]
- 322 0122 0F B7		mov pc, lr
- 323           		
- 324           	timer_1s_adrrb:
- 325 0124 7E 02		.word 	timer_1s	
- 326           	
- 327           	/*
- 328           		---------------------------------------	Level Releated Functions ---------------------------------------
- 329           	*/
- 330           	
- 331           	init_timer_lvl:
- 332 0126 0E 24		push lr
- 333 0128 44 5C		bl sysclk_get_value	
- 334 012A 51 0D		ldr r1, timer_level_adrrb
- 335 012C 10 20		str r0, [r1]	
- 336 012E 0F 04		pop pc
- 337           	
- 338           	get_timer_lvl:
- 339 0130 20 0D		ldr r0, timer_level_adrrb
- 340 0132 00 00		ldr r0, [r0]
- 341 0134 0F B7		mov pc, lr
- 342           	
- 343           	get_level_dif:
- 344 0136 10 0D		ldr r0, current_lvl_addr
- 345 0138 00 08		ldrb r0, [r0] 
- 346 013A 0F B7		mov pc, lr
- 347           		
- 348           	set_level_dif:
- 349 013C 0E 24		push lr
- 350 013E 72 5C		bl inport_read
- 351 0140 01 6C		mov r1, LEVEL_INPUT_MASK
- 352 0142 10 C0		and r0, r1, r0
- 353 0144 00 EB		lsr r0, r0, #6
- 354 0146 31 60		mov r1, VARIANT_LEVEL
- 355 0148 80 B8		cmp r0, r1
- 356 014A F8 43		beq set_level_dif //TODO
- 357           	
- 358 014C 51 0C		ldr r1, lvl_list_addr
- 359 014E 10 18		ldrb r0, [r1, r0]	//lvl_list + input lvl as offset
- 360 0150 41 0C		ldr r1, current_lvl_addr
- 361 0152 10 28		strb r0, [r1]
- 362 0154 0F 04		pop pc
- 363           	
- 364           	timer_level_adrrb:
- 365 0156 7C 02		.word timer_level
- 366           	
- 367           	lvl_list_addr:
- 368 0158 87 02		.word lvl_in_time
+ 319           	direction_addr:
+ 320 0124 B9 02		.word	direction
+ 321           	
+ 322           	/*
+ 323           		---------------------------------------	1s Timer Releated Functions ---------------------------------------
+ 324           	*/
+ 325           	
+ 326           	init_timer_1s:
+ 327 0126 0E 24		push lr
+ 328 0128 5A 5C		bl sysclk_get_value	
+ 329 012A 51 0C		ldr r1, timer_1s_adrrb
+ 330 012C 10 20		str r0, [r1]	
+ 331 012E 0F 04		pop pc
+ 332           	
+ 333           	get_timer_1s:
+ 334 0130 20 0C		ldr r0, timer_1s_adrrb
+ 335 0132 00 00		ldr r0, [r0]
+ 336 0134 0F B7		mov pc, lr
+ 337           		
+ 338           	timer_1s_adrrb:
+ 339 0136 AA 02		.word 	timer_1s
+ 340           	
+ 341           	/*
+ 342           		---------------------------------------	5s Timer Releated Functions ---------------------------------------
+ 343           	*/
+ 344           	
+ 345           	init_timer_5s:
+ 346 0138 0E 24		push lr
+ 347 013A 51 5C		bl sysclk_get_value	
+ 348 013C 51 0C		ldr r1, timer_5s_adrrb
+ 349 013E 10 20		str r0, [r1]	
+ 350 0140 0F 04		pop pc
+ 351           	
+ 352           	get_timer_5s:
+ 353 0142 20 0C		ldr r0, timer_5s_adrrb
+ 354 0144 00 00		ldr r0, [r0]
+ 355 0146 0F B7		mov pc, lr
+ 356           		
+ 357           	timer_5s_adrrb:
+ 358 0148 AC 02		.word 	timer_5s
+ 359           	/*
+ 360           		---------------------------------------	Level Releated Functions ---------------------------------------
+ 361           	*/
+ 362           	
+ 363           	init_timer_lvl:
+ 364 014A 0E 24		push lr
+ 365 014C 48 5C		bl sysclk_get_value	
+ 366 014E 51 0D		ldr r1, timer_level_adrrb
+ 367 0150 10 20		str r0, [r1]	
+ 368 0152 0F 04		pop pc
  369           	
- 370           	current_lvl_addr:
- 371 015A 80 02		.word current_lvl_dificult_in_time
- 372           	
- 373           	/*
- 374           		-------------------------------------------------------------------------------------------------------
- 375           	*/
- 376           	
- 377           	ball_pos_addr:
- 378 015C 86 02		.word 	ball_pos
+ 370           	get_timer_lvl:
+ 371 0154 20 0D		ldr r0, timer_level_adrrb
+ 372 0156 00 00		ldr r0, [r0]
+ 373 0158 0F B7		mov pc, lr
+ 374           	
+ 375           	get_level_dif:
+ 376 015A 10 0D		ldr r0, current_lvl_addr
+ 377 015C 00 08		ldrb r0, [r0] 
+ 378 015E 0F B7		mov pc, lr
  379           		
- 380           	
- 381           		
- 382           	add_score:	
- 383 015E 0E 24		push lr
- 384 0160 40 0C		ldr r0, score_addr_bb
- 385 0162 01 00		ldr r1, [r0]
- 386 0164 91 A0		add r1, r1, 1
- 387 0166 01 20		str r1, [r0]
- 388 0168 0F 04		pop pc
- 389           	;	mov pc, lr
- 390           		
- 391           	score_addr_bb:
- 392 016A 82 02		.word score
- 393           	;-------------------------------------------------------------------------
- 394           	; Rotina:    mov_ball
- 395           	; Descricao: R
- 396           	; Entradas:  -
- 397           	; Saidas:    -
- 398           	; Efeitos:   Move bola em função de direção
- 399           	;			  Na direção do player ou da parede
- 400           	; void mov_ball() {
- 401           	;   
- 402           	;}	
- 403           	mov_ball:
- 404 016C 0E 24		push lr
- 405 016E CA 5F		bl get_direction
- 406 0170 01 B0		mov r1, r0
- 407 0172 CB 5F		bl get_ball_position
- 408 0174 12 60		mov r2, 1
- 409 0176 11 C1		and r1,r1,r2
- 410 0178 11 A8		sub r1, r1, 0	
- 411 017A 02 40		bzs mov_away
- 412           		;move from wall to player (BALL_POS6)01 -> (BALL_POS0)07   
- 413 017C 80 E0		lsl r0, r0,1	
- 414 017E 01 58		b finish_mov
- 415           	mov_away:
- 416 0180 80 E8		lsr r0, r0,1
+ 380           	set_level_dif:
+ 381 0160 0E 24		push lr
+ 382 0162 76 5C		bl inport_read
+ 383 0164 01 6C		mov r1, LEVEL_INPUT_MASK
+ 384 0166 10 C0		and r0, r1, r0
+ 385 0168 00 EB		lsr r0, r0, #6
+ 386 016A 31 60		mov r1, VARIANT_LEVEL
+ 387 016C 80 B8		cmp r0, r1
+ 388 016E F8 43		beq set_level_dif //TODO
+ 389           	
+ 390 0170 51 0C		ldr r1, lvl_list_addr
+ 391 0172 10 18		ldrb r0, [r1, r0]	//lvl_list + input lvl as offset
+ 392 0174 41 0C		ldr r1, current_lvl_addr
+ 393 0176 10 28		strb r0, [r1]
+ 394 0178 0F 04		pop pc
+ 395           	
+ 396           	timer_level_adrrb:
+ 397 017A A8 02		.word timer_level
+ 398           	
+ 399           	lvl_list_addr:
+ 400 017C B5 02		.word lvl_in_time
+ 401           	
+ 402           	current_lvl_addr:
+ 403 017E AE 02		.word current_lvl_dificult_in_time
+ 404           	
+ 405           	/*
+ 406           		-------------------------------------------------------------------------------------------------------
+ 407           	*/
+ 408           	
+ 409           	ball_pos_addr:
+ 410 0180 B4 02		.word 	ball_pos
+ 411           		
+ 412           	get_score:
+ 413 0182 0E 24		push lr
+ 414 0184 81 0C		ldr r1, score_addr_bb
+ 415 0186 10 00		ldr r0, [r1]
+ 416 0188 0F 04		pop pc
  417           		
- 418           	finish_mov:
- 419 0182 31 0C		ldr r1, ball_pos_addr_cc
- 420 0184 10 28		strb r0, [r1]
- 421           		
- 422 0186 0F 04		pop pc
- 423           		
- 424           		
- 425           	direction_addr_bb:
- 426 0188 8B 02		.word direction
- 427           		
- 428           	ball_pos_addr_cc:
- 429 018A 86 02			.word ball_pos
- 430           	
- 431           	;-------------------------------------------------------------------------
- 432           	; Rotina:    isr
- 433           	; Descricao: Rotina responsavel pelo processamento do pedido de interrupcao.
- 434           	; Entradas:  -
- 435           	; Saidas:    -
- 436           	; Efeitos:   Incrementa o valor da variavel global ticks
- 437           	; void isr() {
- 438           	;   ticks++;
- 439           	;	//clear Interrupt Request
- 440           	;}
- 441           	isr:
- 442           		; Prologo
- 443 018C 00 24		push	r0
- 444 018E 01 24		push	r1
- 445 0190 02 24		push	r2
- 446           		; Corpo da rotina
- 447 0192 60 0D		ldr		r0, ticks_addr
- 448 0194 01 00		ldr		r1, [r0, #0]
- 449 0196 91 A0		add		r1, r1, #1
- 450 0198 01 20		str		r1, [r0, #0]
- 451           		; clear Interrupt Request
- 452           		;bl 	timer_clearInterrupt
- 453 019A F1 6F		mov r1, 0xFF
- 454 019C 80 0E		ldr  r0, ptc_addr
- 455 019E 01 2B		strb r1, [ r0, #pTC_TIR ]
- 456           		;bl timer_write	
- 457           		; Epilogo
- 458 01A0 02 04		pop		r2
- 459 01A2 01 04		pop		r1
- 460 01A4 00 04		pop		r0
- 461 01A6 20 B0		movs	pc, lr
- 462           		
- 463           	
- 464           		
- 465           	timer_clearInterrupt:
- 466 01A8 00 60		mov r0, 0
- 467 01AA 21 0C		ldr r1, timer_addressr
- 468 01AC 10 2B		strb r0, [ r1, #pTC_TIR ]
- 469 01AE 0F B7		mov pc, lr
- 470           		
- 471           	timer_addressr:
- 472 01B0 40 FF		.word  pTC_ADDRESS	
- 473           	;-------------------------------------------------------------------------
- 474           	;Funcao para devolver o valor corrente da variável global ticks.
- 475           	;uint16_t sysclk_get_value ( void );
- 476           	;	return ticks;
- 477           	;-------------------------------------------------------------------------
- 478           	sysclk_get_value:
- 479 01B2 61 0C		ldr		r1, ticks_addr
- 480 01B4 10 00		ldr  	r0, [r1, #0] 	; r0 = ticks
- 481 01B6 0F B7		mov		pc, lr
- 482           	
- 483           	;-------------------------------------------------------------------------
- 484           	;Funcao para devolver o tempo decorrido desde o instante last_read. 
- 485           	;O tempo e medido em unidades de contagem ( ticks ).
- 486           	;uint8_t sysclk_elapsed ( uint16_t last_read ){
- 487           	;	return ( ticks - last_read )
- 488           	;}
- 489           	;-------------------------------------------------------------------------
- 490           	sysclk_elapsed:
- 491 01B8 31 0C		ldr	 r1, ticks_addr
- 492 01BA 12 00		ldr  r2, [r1, #0] 	; r0 = ticks
- 493 01BC 20 88		sub  r0, r2, r0
- 494 01BE 0F B7		mov  pc,lr
- 495           	
- 496           	ticks_addr:
- 497 01C0 84 02		.word ticks
+ 418           	add_score:	
+ 419 018A 0E 24		push lr
+ 420 018C 40 0C		ldr r0, score_addr_bb
+ 421 018E 01 00		ldr r1, [r0]
+ 422 0190 91 A0		add r1, r1, 1
+ 423 0192 01 20		str r1, [r0]
+ 424 0194 0F 04		pop pc
+ 425           	;	mov pc, lr
+ 426           		
+ 427           	score_addr_bb:
+ 428 0196 B0 02		.word score
+ 429           	;-------------------------------------------------------------------------
+ 430           	; Rotina:    mov_ball
+ 431           	; Descricao: R
+ 432           	; Entradas:  -
+ 433           	; Saidas:    -
+ 434           	; Efeitos:   Move bola em função de direção
+ 435           	;			  Na direção do player ou da parede
+ 436           	; void mov_ball() {
+ 437           	;   
+ 438           	;}	
+ 439           	mov_ball:
+ 440 0198 0E 24		push lr
+ 441 019A BD 5F		bl get_direction
+ 442 019C 01 B0		mov r1, r0
+ 443 019E BE 5F		bl get_ball_position
+ 444 01A0 12 60		mov r2, 1
+ 445 01A2 11 C1		and r1,r1,r2
+ 446 01A4 11 A8		sub r1, r1, 0	
+ 447 01A6 02 40		bzs mov_away
+ 448           		;move from wall to player (BALL_POS6)01 -> (BALL_POS0)07   
+ 449 01A8 80 E0		lsl r0, r0,1	
+ 450 01AA 01 58		b finish_mov
+ 451           	mov_away:
+ 452 01AC 80 E8		lsr r0, r0,1
+ 453           		
+ 454           	finish_mov:
+ 455 01AE 31 0C		ldr r1, ball_pos_addr_cc
+ 456 01B0 10 28		strb r0, [r1]
+ 457           		
+ 458 01B2 0F 04		pop pc
+ 459           		
+ 460           		
+ 461           	direction_addr_bb:
+ 462 01B4 B9 02		.word direction
+ 463           		
+ 464           	ball_pos_addr_cc:
+ 465 01B6 B4 02			.word ball_pos
+ 466           	
+ 467           	;-------------------------------------------------------------------------
+ 468           	; Rotina:    isr
+ 469           	; Descricao: Rotina responsavel pelo processamento do pedido de interrupcao.
+ 470           	; Entradas:  -
+ 471           	; Saidas:    -
+ 472           	; Efeitos:   Incrementa o valor da variavel global ticks
+ 473           	; void isr() {
+ 474           	;   ticks++;
+ 475           	;	//clear Interrupt Request
+ 476           	;}
+ 477           	isr:
+ 478           		; Prologo
+ 479 01B8 00 24		push	r0
+ 480 01BA 01 24		push	r1
+ 481 01BC 02 24		push	r2
+ 482           		; Corpo da rotina
+ 483 01BE 60 0D		ldr		r0, ticks_addr
+ 484 01C0 01 00		ldr		r1, [r0, #0]
+ 485 01C2 91 A0		add		r1, r1, #1
+ 486 01C4 01 20		str		r1, [r0, #0]
+ 487           		; clear Interrupt Request
+ 488           		;bl 	timer_clearInterrupt
+ 489 01C6 F1 6F		mov r1, 0xFF
+ 490 01C8 80 0E		ldr  r0, ptc_addr
+ 491 01CA 01 2B		strb r1, [ r0, #pTC_TIR ]
+ 492           		;bl timer_write	
+ 493           		; Epilogo
+ 494 01CC 02 04		pop		r2
+ 495 01CE 01 04		pop		r1
+ 496 01D0 00 04		pop		r0
+ 497 01D2 20 B0		movs	pc, lr
  498           		
- 499           	;-------------------------------------------------------------------------
- 500           	;Funcao para iniciar a contagem no periferico.
- 501           	;void timer_start ( void );
- 502           	;-------------------------------------------------------------------------
- 503           	timer_start:
- 504 01C2 01 60		mov  r1, #pTC_CMD_START
- 505 01C4 40 0D		ldr  r0, ptc_addr
- 506 01C6 01 28		strb r1, [ r0, #pTC_TCR ]
- 507 01C8 0F B7		mov  pc, lr
- 508           	
- 509           	
- 510           	timer_write:
- 511 01CA 32 0C		ldr 	r2, timer_addressrc
- 512 01CC 00 80		add		r0, r0, r0
- 513 01CE 21 38		strb 	r1, [r2,r0]	
- 514 01D0 0F B7		mov		pc,lr
- 515           	
- 516           	timer_addressrc:
- 517 01D2 40 FF		.word  pTC_ADDRESS	
- 518           	;-------------------------------------------------------------------------
- 519           	;Funcao para parar a contagem no periferico. 
- 520           	;Colocando o contador com o valor zero.
- 521           	;void timer_stop ( void );
- 522           	;-------------------------------------------------------------------------
- 523           	timer_stop:
- 524 01D4 11 60		mov  r1, #pTC_CMD_STOP
- 525 01D6 B0 0C		ldr  r0, ptc_addr
- 526 01D8 01 28		strb r1, [ r0, #pTC_TCR ]
- 527 01DA 0F B7		mov  pc, lr
- 528           	
- 529           	;-------------------------------------------------------------------------
- 530           	;Funcao que faz a iniciacao do periferico para habilitar o 
- 531           	;funcionamento em modo continuo e com intervalo de contagem 
- 532           	;interval, em ticks.
- 533           	;void timer_init ( uint8_t interval );
- 534           	;-------------------------------------------------------------------------
- 535           	timer_init:
- 536 01DC 0E 24		push lr
- 537 01DE 00 24		push r0				
- 538           		; Parar contagem
- 539 01E0 F9 5F		bl   timer_stop
- 540           		; Programar intervalo de contagem
- 541 01E2 00 04		pop	 r0
- 542 01E4 41 0C		ldr  r1, ptc_addr
- 543 01E6 10 29		strb r0, [ r1, #pTC_TMR ]
- 544           		; Clear Interrupt Request
- 545 01E8 21 0C		ldr  r1, ptc_addr
- 546 01EA 10 2B		strb r0, [ r1, #pTC_TIR ]
- 547 01EC 0F 04		pop  pc
- 548           		
- 549           	ptc_addr:
- 550 01EE 40 FF		.word pTC_ADDRESS
+ 499           	
+ 500           		
+ 501           	timer_clearInterrupt:
+ 502 01D4 00 60		mov r0, 0
+ 503 01D6 21 0C		ldr r1, timer_addressr
+ 504 01D8 10 2B		strb r0, [ r1, #pTC_TIR ]
+ 505 01DA 0F B7		mov pc, lr
+ 506           		
+ 507           	timer_addressr:
+ 508 01DC 40 FF		.word  pTC_ADDRESS	
+ 509           	;-------------------------------------------------------------------------
+ 510           	;Funcao para devolver o valor corrente da variável global ticks.
+ 511           	;uint16_t sysclk_get_value ( void );
+ 512           	;	return ticks;
+ 513           	;-------------------------------------------------------------------------
+ 514           	sysclk_get_value:
+ 515 01DE 61 0C		ldr		r1, ticks_addr
+ 516 01E0 10 00		ldr  	r0, [r1, #0] 	; r0 = ticks
+ 517 01E2 0F B7		mov		pc, lr
+ 518           	
+ 519           	;-------------------------------------------------------------------------
+ 520           	;Funcao para devolver o tempo decorrido desde o instante last_read. 
+ 521           	;O tempo e medido em unidades de contagem ( ticks ).
+ 522           	;uint8_t sysclk_elapsed ( uint16_t last_read ){
+ 523           	;	return ( ticks - last_read )
+ 524           	;}
+ 525           	;-------------------------------------------------------------------------
+ 526           	sysclk_elapsed:
+ 527 01E4 31 0C		ldr	 r1, ticks_addr
+ 528 01E6 12 00		ldr  r2, [r1, #0] 	; r0 = ticks
+ 529 01E8 20 88		sub  r0, r2, r0
+ 530 01EA 0F B7		mov  pc,lr
+ 531           	
+ 532           	ticks_addr:
+ 533 01EC B2 02		.word ticks
+ 534           		
+ 535           	;-------------------------------------------------------------------------
+ 536           	;Funcao para iniciar a contagem no periferico.
+ 537           	;void timer_start ( void );
+ 538           	;-------------------------------------------------------------------------
+ 539           	timer_start:
+ 540 01EE 01 60		mov  r1, #pTC_CMD_START
+ 541 01F0 40 0D		ldr  r0, ptc_addr
+ 542 01F2 01 28		strb r1, [ r0, #pTC_TCR ]
+ 543 01F4 0F B7		mov  pc, lr
+ 544           	
+ 545           	
+ 546           	timer_write:
+ 547 01F6 32 0C		ldr 	r2, timer_addressrc
+ 548 01F8 00 80		add		r0, r0, r0
+ 549 01FA 21 38		strb 	r1, [r2,r0]	
+ 550 01FC 0F B7		mov		pc,lr
  551           	
- 552           	;---------------------------------------------------------------------------------	
- 553           	;uint8_t sw_is_pressed(uint8_t pin_mask) {
- 554           	;uint8_t sw_new_state;
- 555           	;   sw_new_state = inport_test_bits( pin_mask );
- 556           	;	if ( sw_state == sw_new_state )
- 557           	;		return 0;
- 558           	;	sw_state = sw_new_state;
- 559           	;   if ( sw_new_state == 0 )
- 560           	;		return 0;
- 561           	;	return 1;
- 562           	;}
- 563           	;---------------------------------------------------------------------------------	
- 564           	; Rotina:    sw_is_pressed
- 565           	; Descricao: 
- 566           	; Entradas:  pins_mask
- 567           	; Saidas:    devolve 1 se detecta uma transição 0 -> 1 no pino identificado em pin_mask 
- 568           	;            e 0 se não detecta.   
- 569           	; Efeitos:   
- 570           	;---------------------------------------------------------------------------------	
- 571           	sw_is_pressed:
- 572 01F0 0E 24		push	lr
- 573 01F2 0C 5C		bl		inport_test_bits 
- 574           		; r0 = sw_new_state = inport_test_bits(pins_mask)
- 575 01F4 A1 0C		ldr		r1, sw_state_address
- 576 01F6 12 08		ldrb	r2, [r1, #0]	; r2 = sw_state
- 577 01F8 00 B9		cmp		r0, r2			; sw_state == sw_new_state
- 578 01FA 05 40		beq		sw_is_pressed_0
- 579 01FC 10 28		strb	r0, [r1, #0]	; sw_state = sw_new_state;
- 580 01FE 00 A8		sub		r0, r0, #0
- 581 0200 02 40		beq		sw_is_pressed_0
- 582 0202 10 60		mov		r0, #1
- 583 0204 01 58		b		sw_is_pressed_1
- 584           	sw_is_pressed_0:
- 585 0206 00 60		mov		r0, #0
- 586           	sw_is_pressed_1:
- 587 0208 0F 04		pop		pc
- 588           	
- 589           	sw_state_address:
- 590 020A 8C 02		.word	sw_state
- 591           	
- 592           	;---------------------------------------------------------------------------------	
- 593           	;uint16_t inport_test_bits(uint16_t pins_mask) {
- 594           	;	return ((inport_read() & pins_mask) == pins_mask);
- 595           	;}
- 596           	;---------------------------------------------------------------------------------	
- 597           	; Rotina:    inport_test_bits
- 598           	; Descricao: Devolve um se todos dos pinos do porto de entrada identificados com o valor um
- 599           	; em pins_mask tomaremm o valor logico um , ou zero no caso contrario .
- 600           	; Entradas:  Mascara com os bits a testar
- 601           	; Saidas:    Devolve um ou zero conforme a descrição.
- 602           	; Efeitos:   
- 603           	;---------------------------------------------------------------------------------	
- 604           	inport_test_bits:
- 605 020C 0E 24		push	lr
- 606 020E 04 24		push	r4
- 607 0210 04 B0		mov		r4, r0
- 608 0212 08 5C		bl		inport_read
- 609 0214 00 C2		and		r0, r0, r4
- 610 0216 00 BA		cmp     r0, r4
- 611 0218 02 40		beq		end_inport_test_bit_1
- 612 021A 00 60		mov		r0, #0
- 613 021C 01 58		b		end_inport_test_bit
- 614           	end_inport_test_bit_1:
- 615 021E 10 60		mov		r0, #1
- 616           	end_inport_test_bit:
- 617 0220 04 04		pop		r4
- 618 0222 0F 04		pop		pc
- 619           		
- 620           	;---------------------------------------------------------------------------------	
- 621           	;uint16_t inport_read() {
- 622           	;	return [INPORT_ADDRESS];
- 623           	;}
- 624           	;---------------------------------------------------------------------------------	
- 625           	; Rotina:    inport_read
- 626           	; Descricao: Devolve o valor corrente do estado dos pinos do porto de entrada.
- 627           	; Entradas:  
- 628           	; Saidas:    Valor corrente do porto
- 629           	; Efeitos:   
- 630           	;---------------------------------------------------------------------------------	
- 631           	inport_read:
- 632 0224 60 0C		ldr		r0, inport_address_local
- 633 0226 00 08		ldrb	r0, [r0, #0]
- 634 0228 0F B7		mov		pc, lr
- 635           	
- 636           	;---------------------------------------------------------------------------------	
- 637           	; Rotina:    inport_read_with_mask
- 638           	; Descricao: Devolve o valor corrente do estado dos pinos do porto de entrada, em função da mascara passada
- 639           	; Entradas:  
- 640           	; Saidas:    Valor corrente do porto de entrada para a mascara
- 641           	; Efeitos:   
- 642           	;---------------------------------------------------------------------------------
- 643           	inport_read_with_mask:
- 644 022A 31 0C		ldr		r1, inport_address_local
- 645 022C 11 08		ldrb	r1, [r1, #0]
- 646 022E 80 C0		and		r0, r0, r1
- 647 0230 0F B7		mov		pc, lr
- 648           	
- 649           	inport_address_local:
- 650 0232 00 FF		.word	INPORT_ADDRESS
- 651           	;---------------------------------------------------------------------------------	
- 652           	;uint8_t outport_init(uint8_t initial_value) {
- 653           	;	outport_img = initial_value;
- 654           	;	outport_write(outport_img);
- 655           	;}
+ 552           	timer_addressrc:
+ 553 01FE 40 FF		.word  pTC_ADDRESS	
+ 554           	;-------------------------------------------------------------------------
+ 555           	;Funcao para parar a contagem no periferico. 
+ 556           	;Colocando o contador com o valor zero.
+ 557           	;void timer_stop ( void );
+ 558           	;-------------------------------------------------------------------------
+ 559           	timer_stop:
+ 560 0200 11 60		mov  r1, #pTC_CMD_STOP
+ 561 0202 B0 0C		ldr  r0, ptc_addr
+ 562 0204 01 28		strb r1, [ r0, #pTC_TCR ]
+ 563 0206 0F B7		mov  pc, lr
+ 564           	
+ 565           	;-------------------------------------------------------------------------
+ 566           	;Funcao que faz a iniciacao do periferico para habilitar o 
+ 567           	;funcionamento em modo continuo e com intervalo de contagem 
+ 568           	;interval, em ticks.
+ 569           	;void timer_init ( uint8_t interval );
+ 570           	;-------------------------------------------------------------------------
+ 571           	timer_init:
+ 572 0208 0E 24		push lr
+ 573 020A 00 24		push r0				
+ 574           		; Parar contagem
+ 575 020C F9 5F		bl   timer_stop
+ 576           		; Programar intervalo de contagem
+ 577 020E 00 04		pop	 r0
+ 578 0210 41 0C		ldr  r1, ptc_addr
+ 579 0212 10 29		strb r0, [ r1, #pTC_TMR ]
+ 580           		; Clear Interrupt Request
+ 581 0214 21 0C		ldr  r1, ptc_addr
+ 582 0216 10 2B		strb r0, [ r1, #pTC_TIR ]
+ 583 0218 0F 04		pop  pc
+ 584           		
+ 585           	ptc_addr:
+ 586 021A 40 FF		.word pTC_ADDRESS
+ 587           	
+ 588           	;---------------------------------------------------------------------------------	
+ 589           	;uint8_t sw_is_pressed(uint8_t pin_mask) {
+ 590           	;uint8_t sw_new_state;
+ 591           	;   sw_new_state = inport_test_bits( pin_mask );
+ 592           	;	if ( sw_state == sw_new_state )
+ 593           	;		return 0;
+ 594           	;	sw_state = sw_new_state;
+ 595           	;   if ( sw_new_state == 0 )
+ 596           	;		return 0;
+ 597           	;	return 1;
+ 598           	;}
+ 599           	;---------------------------------------------------------------------------------	
+ 600           	; Rotina:    sw_is_pressed
+ 601           	; Descricao: 
+ 602           	; Entradas:  pins_mask
+ 603           	; Saidas:    devolve 1 se detecta uma transição 0 -> 1 no pino identificado em pin_mask 
+ 604           	;            e 0 se não detecta.   
+ 605           	; Efeitos:   
+ 606           	;---------------------------------------------------------------------------------	
+ 607           	sw_is_pressed:
+ 608 021C 0E 24		push	lr
+ 609 021E 0C 5C		bl		inport_test_bits 
+ 610           		; r0 = sw_new_state = inport_test_bits(pins_mask)
+ 611 0220 A1 0C		ldr		r1, sw_state_address
+ 612 0222 12 08		ldrb	r2, [r1, #0]	; r2 = sw_state
+ 613 0224 00 B9		cmp		r0, r2			; sw_state == sw_new_state
+ 614 0226 05 40		beq		sw_is_pressed_0
+ 615 0228 10 28		strb	r0, [r1, #0]	; sw_state = sw_new_state;
+ 616 022A 00 A8		sub		r0, r0, #0
+ 617 022C 02 40		beq		sw_is_pressed_0
+ 618 022E 10 60		mov		r0, #1
+ 619 0230 01 58		b		sw_is_pressed_1
+ 620           	sw_is_pressed_0:
+ 621 0232 00 60		mov		r0, #0
+ 622           	sw_is_pressed_1:
+ 623 0234 0F 04		pop		pc
+ 624           	
+ 625           	sw_state_address:
+ 626 0236 BA 02		.word	sw_state
+ 627           	
+ 628           	;---------------------------------------------------------------------------------	
+ 629           	;uint16_t inport_test_bits(uint16_t pins_mask) {
+ 630           	;	return ((inport_read() & pins_mask) == pins_mask);
+ 631           	;}
+ 632           	;---------------------------------------------------------------------------------	
+ 633           	; Rotina:    inport_test_bits
+ 634           	; Descricao: Devolve um se todos dos pinos do porto de entrada identificados com o valor um
+ 635           	; em pins_mask tomaremm o valor logico um , ou zero no caso contrario .
+ 636           	; Entradas:  Mascara com os bits a testar
+ 637           	; Saidas:    Devolve um ou zero conforme a descrição.
+ 638           	; Efeitos:   
+ 639           	;---------------------------------------------------------------------------------	
+ 640           	inport_test_bits:
+ 641 0238 0E 24		push	lr
+ 642 023A 04 24		push	r4
+ 643 023C 04 B0		mov		r4, r0
+ 644 023E 08 5C		bl		inport_read
+ 645 0240 00 C2		and		r0, r0, r4
+ 646 0242 00 BA		cmp     r0, r4
+ 647 0244 02 40		beq		end_inport_test_bit_1
+ 648 0246 00 60		mov		r0, #0
+ 649 0248 01 58		b		end_inport_test_bit
+ 650           	end_inport_test_bit_1:
+ 651 024A 10 60		mov		r0, #1
+ 652           	end_inport_test_bit:
+ 653 024C 04 04		pop		r4
+ 654 024E 0F 04		pop		pc
+ 655           		
  656           	;---------------------------------------------------------------------------------	
- 657           	; Rotina:    outport_init
- 658           	; Descricao: Inicia o porto de saida, atribuindo-lhe o valor do argumento passado 
- 659           	;			 a rotina.
- 660           	; Entradas:  Valor para iniciar o porto de saida
- 661           	; Saidas:    
- 662           	; Efeitos:   Atualiza o valor da variavel imagem do porto
- 663           	;---------------------------------------------------------------------------------	
- 664           	outport_init:
- 665 0234 0E 24		push	lr
- 666 0236 00 60		mov r0 , #0
- 667 0238 F1 0D		ldr		r1, outport_img_address
- 668 023A 10 28		strb	r0, [r1, #0]
- 669 023C 1A 5C		bl		outport_write
- 670 023E 0F 04		pop		pc
+ 657           	;uint16_t inport_read() {
+ 658           	;	return [INPORT_ADDRESS];
+ 659           	;}
+ 660           	;---------------------------------------------------------------------------------	
+ 661           	; Rotina:    inport_read
+ 662           	; Descricao: Devolve o valor corrente do estado dos pinos do porto de entrada.
+ 663           	; Entradas:  
+ 664           	; Saidas:    Valor corrente do porto
+ 665           	; Efeitos:   
+ 666           	;---------------------------------------------------------------------------------	
+ 667           	inport_read:
+ 668 0250 60 0C		ldr		r0, inport_address_local
+ 669 0252 00 08		ldrb	r0, [r0, #0]
+ 670 0254 0F B7		mov		pc, lr
  671           	
  672           	;---------------------------------------------------------------------------------	
- 673           	;void outport_set_bits(uint8_t pins_mask) {
- 674           	;	outport_img |= pins_mask;
- 675           	;	ourport_write(outport_img);
- 676           	;}
- 677           	;---------------------------------------------------------------------------------	
- 678           	; Rotina:    outport_set_bits
- 679           	; Descricao: Atribui o valor logico '1' aos pinos do porto de saida identificados 
- 680           	;			 com o valor 1 no argumento passado a rotina. O estado dos restantes 
- 681           	;			 bits nao e alterado.
- 682           	; Entradas:  Mascara com os bits a alterar
- 683           	; Saidas:    
- 684           	; Efeitos:   Atualiza o valor da variavel imagem do porto
- 685           	;---------------------------------------------------------------------------------	
- 686           	outport_set_bits:
- 687 0240 0E 24		push	lr
- 688 0242 A1 0D		ldr		r1, outport_img_address
- 689 0244 12 08		ldrb	r2, [r1, #0]
- 690 0246 20 C8		orr		r0, r2, r0
- 691 0248 10 28		strb	r0, [r1, #0]
- 692 024A 13 5C		bl		outport_write
- 693 024C 0F 04		pop		pc
- 694           	
- 695           	;---------------------------------------------------------------------------------	
- 696           	;void outport_clear_bits(uint8_t pins_mask) {
- 697           	;	outport_img &= ~pins_mask ;
- 698           	;	ourport_write(outport_img);
- 699           	;}
- 700           	;---------------------------------------------------------------------------------	
- 701           	; Rotina:    outport_clear_bits
- 702           	; Descricao: Atribui o valor logico '0' aos pinos do porto de saida identificados 
- 703           	;			 com o valor 1 no argumento passado a rotina. O estado dos restantes 
- 704           	;			 bits nao e alterado.
- 705           	; Entradas:  Mascara com os bits a alterar
- 706           	; Saidas:    
- 707           	; Efeitos:   Atualiza o valor da variavel imagem do porto
+ 673           	; Rotina:    inport_read_with_mask
+ 674           	; Descricao: Devolve o valor corrente do estado dos pinos do porto de entrada, em função da mascara passada
+ 675           	; Entradas:  
+ 676           	; Saidas:    Valor corrente do porto de entrada para a mascara
+ 677           	; Efeitos:   
+ 678           	;---------------------------------------------------------------------------------
+ 679           	inport_read_with_mask:
+ 680 0256 31 0C		ldr		r1, inport_address_local
+ 681 0258 11 08		ldrb	r1, [r1, #0]
+ 682 025A 80 C0		and		r0, r0, r1
+ 683 025C 0F B7		mov		pc, lr
+ 684           	
+ 685           	inport_address_local:
+ 686 025E 00 FF		.word	INPORT_ADDRESS
+ 687           	;---------------------------------------------------------------------------------	
+ 688           	;uint8_t outport_init(uint8_t initial_value) {
+ 689           	;	outport_img = initial_value;
+ 690           	;	outport_write(outport_img);
+ 691           	;}
+ 692           	;---------------------------------------------------------------------------------	
+ 693           	; Rotina:    outport_init
+ 694           	; Descricao: Inicia o porto de saida, atribuindo-lhe o valor do argumento passado 
+ 695           	;			 a rotina.
+ 696           	; Entradas:  Valor para iniciar o porto de saida
+ 697           	; Saidas:    
+ 698           	; Efeitos:   Atualiza o valor da variavel imagem do porto
+ 699           	;---------------------------------------------------------------------------------	
+ 700           	outport_init:
+ 701 0260 0E 24		push	lr
+ 702 0262 00 60		mov r0 , #0
+ 703 0264 F1 0D		ldr		r1, outport_img_address
+ 704 0266 10 28		strb	r0, [r1, #0]
+ 705 0268 1A 5C		bl		outport_write
+ 706 026A 0F 04		pop		pc
+ 707           	
  708           	;---------------------------------------------------------------------------------	
- 709           	outport_clear_bits:
- 710 024E 0E 24		push	lr
- 711 0250 31 0D		ldr		r1, outport_img_address
- 712 0252 12 08		ldrb	r2, [r1, #0]
- 713 0254 10 B0		mvn		r0, r0
- 714 0256 20 C0		and		r0, r2, r0
- 715 0258 10 28		strb	r0, [r1, #0]
- 716 025A 0B 5C		bl		outport_write
- 717 025C 0F 04		pop		pc
- 718           	
- 719           	;---------------------------------------------------------------------------------	
- 720           	;void outport_write_bits(uint8_t pins_mask, uint8_t value) {
- 721           	;	value &= pins_mask;
- 722           	;	outport_img &= ~pins_mask;
- 723           	;	outport_img |= value;
- 724           	;	ourport_write(outport_img)
- 725           	;}
- 726           	;---------------------------------------------------------------------------------	
- 727           	; Rotina:    outport_write_bits
- 728           	; Descricao: Atribui aos pinos do porto de saida identificados com o valor lógico
- 729           	;            um em pins_mask o valor dos bits correspondentes de value. O estado 
- 730           	;            dos restantes bits nao e alterado.
- 731           	; Entradas:  Mascara com os bits a alterar
- 732           	;         :  valor dos bits a alterar  
- 733           	; Saidas:    
- 734           	; Efeitos:   Atualiza o valor da variavel imagem do porto
- 735           	;---------------------------------------------------------------------------------	
- 736           	outport_write_bits:
- 737 025E 0E 24		push	lr
- 738 0260 81 C0		and		r1, r0, r1				; r1 = pins_mask & value
- 739 0262 A2 0C		ldr		r2, outport_img_address
- 740 0264 23 08		ldrb	r3, [r2, #0]
- 741 0266 10 B0		mvn		r0, r0					; ~pins_mask
- 742 0268 33 C0		and		r3, r3, r0				; outport_img &= ~pins_mask;
- 743 026A B0 C8		orr		r0, r3, r1				; outport_img |= pins_mask & value;
- 744 026C 20 28		strb	r0, [r2, #0]
- 745 026E 01 5C		bl		outport_write
- 746 0270 0F 04		pop		pc
- 747           	
- 748           	;---------------------------------------------------------------------------------	
- 749           	;void outport_write(uint8_t value) {
- 750           	;	outport_img = value;
- 751           	;	[OUTPORT_ADDRESS] = outport_img;
- 752           	;}
- 753           	;---------------------------------------------------------------------------------	
- 754           	; Rotina:    outport_write
- 755           	; Descricao: Atribui aos pinos do porto de saida o valor dos bits correspondentes de value.
- 756           	; Entradas:  Valor a escrever no porto
- 757           	; Saidas:    
- 758           	; Efeitos:   Atualiza o valor da variavel imagem do porto
- 759           	;---------------------------------------------------------------------------------	
- 760           	outport_write:
- 761 0272 31 0C		ldr		r1, outport_addr
- 762 0274 10 28		strb	r0, [r1, #0]
- 763 0276 0F B7		mov		pc, lr
- 764           	
- 765           	outport_img_address:
- 766 0278 8E 02		.word	outport_img
- 767           	
- 768           	outport_addr:
- 769 027A 00 FF		.word	OUTPORT_ADDRESS
- 770           		
- 771           	; Seccao:    .data
- 772           	; Descricao: Guarda as variáveis globais com valor inicial definido
- 773           	;
- 774           		.data
- 775           	timer_level:
- 776 027C 00 00		.word	0
- 777           		
- 778           	timer_1s:
- 779 027E 00 00		.word	0
- 780           		
- 781           	current_lvl_dificult_in_time:
- 782 0280 0A 00		.word	10
+ 709           	;void outport_set_bits(uint8_t pins_mask) {
+ 710           	;	outport_img |= pins_mask;
+ 711           	;	ourport_write(outport_img);
+ 712           	;}
+ 713           	;---------------------------------------------------------------------------------	
+ 714           	; Rotina:    outport_set_bits
+ 715           	; Descricao: Atribui o valor logico '1' aos pinos do porto de saida identificados 
+ 716           	;			 com o valor 1 no argumento passado a rotina. O estado dos restantes 
+ 717           	;			 bits nao e alterado.
+ 718           	; Entradas:  Mascara com os bits a alterar
+ 719           	; Saidas:    
+ 720           	; Efeitos:   Atualiza o valor da variavel imagem do porto
+ 721           	;---------------------------------------------------------------------------------	
+ 722           	outport_set_bits:
+ 723 026C 0E 24		push	lr
+ 724 026E A1 0D		ldr		r1, outport_img_address
+ 725 0270 12 08		ldrb	r2, [r1, #0]
+ 726 0272 20 C8		orr		r0, r2, r0
+ 727 0274 10 28		strb	r0, [r1, #0]
+ 728 0276 13 5C		bl		outport_write
+ 729 0278 0F 04		pop		pc
+ 730           	
+ 731           	;---------------------------------------------------------------------------------	
+ 732           	;void outport_clear_bits(uint8_t pins_mask) {
+ 733           	;	outport_img &= ~pins_mask ;
+ 734           	;	ourport_write(outport_img);
+ 735           	;}
+ 736           	;---------------------------------------------------------------------------------	
+ 737           	; Rotina:    outport_clear_bits
+ 738           	; Descricao: Atribui o valor logico '0' aos pinos do porto de saida identificados 
+ 739           	;			 com o valor 1 no argumento passado a rotina. O estado dos restantes 
+ 740           	;			 bits nao e alterado.
+ 741           	; Entradas:  Mascara com os bits a alterar
+ 742           	; Saidas:    
+ 743           	; Efeitos:   Atualiza o valor da variavel imagem do porto
+ 744           	;---------------------------------------------------------------------------------	
+ 745           	outport_clear_bits:
+ 746 027A 0E 24		push	lr
+ 747 027C 31 0D		ldr		r1, outport_img_address
+ 748 027E 12 08		ldrb	r2, [r1, #0]
+ 749 0280 10 B0		mvn		r0, r0
+ 750 0282 20 C0		and		r0, r2, r0
+ 751 0284 10 28		strb	r0, [r1, #0]
+ 752 0286 0B 5C		bl		outport_write
+ 753 0288 0F 04		pop		pc
+ 754           	
+ 755           	;---------------------------------------------------------------------------------	
+ 756           	;void outport_write_bits(uint8_t pins_mask, uint8_t value) {
+ 757           	;	value &= pins_mask;
+ 758           	;	outport_img &= ~pins_mask;
+ 759           	;	outport_img |= value;
+ 760           	;	ourport_write(outport_img)
+ 761           	;}
+ 762           	;---------------------------------------------------------------------------------	
+ 763           	; Rotina:    outport_write_bits
+ 764           	; Descricao: Atribui aos pinos do porto de saida identificados com o valor lógico
+ 765           	;            um em pins_mask o valor dos bits correspondentes de value. O estado 
+ 766           	;            dos restantes bits nao e alterado.
+ 767           	; Entradas:  Mascara com os bits a alterar
+ 768           	;         :  valor dos bits a alterar  
+ 769           	; Saidas:    
+ 770           	; Efeitos:   Atualiza o valor da variavel imagem do porto
+ 771           	;---------------------------------------------------------------------------------	
+ 772           	outport_write_bits:
+ 773 028A 0E 24		push	lr
+ 774 028C 81 C0		and		r1, r0, r1				; r1 = pins_mask & value
+ 775 028E A2 0C		ldr		r2, outport_img_address
+ 776 0290 23 08		ldrb	r3, [r2, #0]
+ 777 0292 10 B0		mvn		r0, r0					; ~pins_mask
+ 778 0294 33 C0		and		r3, r3, r0				; outport_img &= ~pins_mask;
+ 779 0296 B0 C8		orr		r0, r3, r1				; outport_img |= pins_mask & value;
+ 780 0298 20 28		strb	r0, [r2, #0]
+ 781 029A 01 5C		bl		outport_write
+ 782 029C 0F 04		pop		pc
  783           	
- 784           	score:
- 785 0282 00 00		.word	0
- 786           		
- 787           	ticks:
- 788 0284 00 00		.word	0		; uint16_t ticks;
- 789           		
- 790           	ball_pos:
- 791 0286 80		.byte	0x80
- 792           	lvl_in_time:
- 793           		.byte	100, 50, 25
- 793 0287 64 32 19
- 794           	
- 795           	new_point_led:
- 796 028A 00		.byte	0x00
- 797           		
- 798           	direction: ; 0 away from player 1 into the player
- 799 028B 00		.byte	0x00
- 800           	sw_state:
- 801 028C 00		.byte 	0
- 802           	; Seccao:    .bss
- 803           	; Descricao: Guarda as variáveis globais sem valor inicial definido
- 804           	;
- 805           		.section .bss
- 806           	outport_img:			; Imagem do porto de saida no programa
- 807 028E 00   		.space	1	
- 808           	
- 809           	; Seccao:    .stack
- 810           	; Descricao: Implementa a pilha com o tamanho definido pelo simbolo STACK_SIZE
- 811           	;
- 812           		.section .stack
- 813 0290 00   		.space STACK_SIZE
- 813 .... ..
- 813 02CF 00
- 814           	tos:
+ 784           	;---------------------------------------------------------------------------------	
+ 785           	;void outport_write(uint8_t value) {
+ 786           	;	outport_img = value;
+ 787           	;	[OUTPORT_ADDRESS] = outport_img;
+ 788           	;}
+ 789           	;---------------------------------------------------------------------------------	
+ 790           	; Rotina:    outport_write
+ 791           	; Descricao: Atribui aos pinos do porto de saida o valor dos bits correspondentes de value.
+ 792           	; Entradas:  Valor a escrever no porto
+ 793           	; Saidas:    
+ 794           	; Efeitos:   Atualiza o valor da variavel imagem do porto
+ 795           	;---------------------------------------------------------------------------------	
+ 796           	outport_write:
+ 797 029E 31 0C		ldr		r1, outport_addr
+ 798 02A0 10 28		strb	r0, [r1, #0]
+ 799 02A2 0F B7		mov		pc, lr
+ 800           	
+ 801           	outport_img_address:
+ 802 02A4 BC 02		.word	outport_img
+ 803           	
+ 804           	outport_addr:
+ 805 02A6 00 FF		.word	OUTPORT_ADDRESS
+ 806           		
+ 807           	; Seccao:    .data
+ 808           	; Descricao: Guarda as variáveis globais com valor inicial definido
+ 809           	;
+ 810           		.data
+ 811           	timer_level:
+ 812 02A8 00 00		.word	0
+ 813           		
+ 814           	timer_1s:
+ 815 02AA 00 00		.word	0
+ 816           		
+ 817           	timer_5s:
+ 818 02AC 00 00		.word	0
+ 819           		
+ 820           	current_lvl_dificult_in_time:
+ 821 02AE 0A 00		.word	10
+ 822           	
+ 823           	score:
+ 824 02B0 00 00		.word	0
+ 825           		
+ 826           	ticks:
+ 827 02B2 00 00		.word	0		; uint16_t ticks;
+ 828           		
+ 829           	ball_pos:
+ 830 02B4 80		.byte	0x80
+ 831           	lvl_in_time:
+ 832           		.byte	0x5c, 0x3c, 0x0c
+ 832 02B5 5C 3C 0C
+ 833           	
+ 834           	new_point_led:
+ 835 02B8 00		.byte	0x00
+ 836           		
+ 837           	direction: ; 0 away from player 1 into the player
+ 838 02B9 00		.byte	0x00
+ 839           	sw_state:
+ 840 02BA 00		.byte 	0
+ 841           	; Seccao:    .bss
+ 842           	; Descricao: Guarda as variáveis globais sem valor inicial definido
+ 843           	;
+ 844           		.section .bss
+ 845           	outport_img:			; Imagem do porto de saida no programa
+ 846 02BC 00   		.space	1	
+ 847           	
+ 848           	; Seccao:    .stack
+ 849           	; Descricao: Implementa a pilha com o tamanho definido pelo simbolo STACK_SIZE
+ 850           	;
+ 851           		.section .stack
+ 852 02BE 00   		.space STACK_SIZE
+ 852 .... ..
+ 852 02FD 00
+ 853           	tos:

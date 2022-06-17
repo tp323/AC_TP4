@@ -6,17 +6,17 @@
 
 ; Definicao dos valores dos simbolos utilizados no programa
 ;
-	.equ	STACK_SIZE, 64             ; Dimensao do stack (em bytes)
+	.equ	STACK_SIZE, 64           ; Dimensao do stack (em bytes)
 
 	.equ    INPORT_ADDRESS, 0xFF00  ; Endereço do porto de entrada da placa SDP16
 	.equ	OUTPORT_ADDRESS, 0xFF00 ; Endereço do porto de saida da placa SDP16
 
 	.equ	CPSR_BIT_I, 0x10          ; Mascara para a flag I do registo CPSR
-
+	.equ	PTC_VALUE, 50
 	.equ	SYSCLK_FREQ, 0x5          ; Intervalo de contagem do circuito pTC
-                                          ; que suporta a implementação do sysclk
-										  ; fin_pTC = 10Hz fout_ptc=2Hz => T=500ms 
-										  ; TMR = 10Hz/2Hz = 5
+                                        ; que suporta a implementação do sysclk
+										; fin_pTC = 10Hz fout_ptc=2Hz => T=500ms 
+										; TMR = 10Hz/2Hz = 5
 	.equ 	LED0_MASK, 0x01
 	.equ 	OUTPORT_INIT_VALUE, 0x00
 
@@ -98,7 +98,7 @@ SYS_init:
 	strb r0, [r1]
 	
 	
-	mov r0, #50
+	mov r0, PTC_VALUE
 	bl timer_init		
 	;bl timer_clearInterrupt	
 
@@ -226,16 +226,14 @@ game_over:
 	bl get_score
 	bl outport_set_bits
 	bl init_timer_5s
-	mov r2, VALU_OF_5S
-	bl game_over_loop
-	;b .
+	mov r4, VALU_OF_5S
 	
 ;wait 5s
 game_over_loop:
 	;push lr
 	bl get_timer_5s
 	bl sysclk_elapsed
-	cmp r0, r2
+	cmp r0, r4
 	blo game_over_loop
 	bl timer_stop
 	b  main_while 	
@@ -353,7 +351,7 @@ init_timer_5s:
 
 get_timer_5s:
 	ldr r0, timer_5s_adrrb
-	ldr r0, [r0, r0]
+	ldr r0, [r0]
 	mov pc, lr
 	
 timer_5s_adrrb:
