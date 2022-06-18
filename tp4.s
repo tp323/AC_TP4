@@ -40,9 +40,9 @@
 	.equ	BALL_LEDS_MASK, 0xfe
 	.equ 	RAKET_MASK, 0x01
 	.equ 	LVL_MASK, 0xc0
-	.equ	VALU_OF_1S, 0x0c
-	.equ	VALU_OF_5S, 0x3c
-	.equ	VALU_OF_25, 0x03
+	.equ	VALU_OF_1S, 20		;0.05 * 20 = 1s
+	.equ	VALU_OF_5S, 100		;0.05 * 100 = 5s
+	.equ	VALU_OF_25, 5		;0.05 * 5 = 2.5s
 
 	.equ	VARIANT_LEVEL, 3
 
@@ -852,7 +852,7 @@ ticks:
 ball_pos:
 	.byte	0x80
 lvl_in_time:
-	.byte	0x5c, 0x3c, 0x0c
+	.byte	20, 10, 5		; 1s / 0.5s / 0.25s
 
 new_point_led:
 	.byte	0x00
