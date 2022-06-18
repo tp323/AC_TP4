@@ -92,12 +92,12 @@ SYS_init:
 	push lr
 	bl outport_init		
 	bl timer_stop
-	ldr		r0, ticks_addrb
+	ldr		r0, ticks_addr
 	ldr		r1, [r0, #0]
 	mov		r1,  #0
 	str		r1, [r0, #0]
 	mov r0, PLAYER_MASK	;posição de inicio do jogo
-	ldr r1, ball_pos_addr_ddd
+	ldr r1, ball_pos_addr
 	strb r0, [r1]
 	
 	mov r0, PTC_VALUE
@@ -107,26 +107,26 @@ SYS_init:
 	msr cpsr, r0	
 	pop pc	
 	
-ball_pos_addr_ddd:
+ball_pos_addr:
 	.word 	ball_pos	
 	
-ticks_addrb:
+ticks_addr:
 	.word ticks
 
 main:
 	push lr	
 	bl timer_stop
-	ldr r0, direction_addr_cc
+	ldr r0, direction_addr
 	mov r1, 0
 	strb r1, [r0]
 	b main_while
 	
-direction_addr_cc:
+direction_addr:
 	.word	direction
 	
 main_while:
-	bl set_ball_leds
 	bl reset_all
+	bl set_ball_leds
 	
 wait_for_init_stroke:
 	mov r0, RAKET_MASK
@@ -230,15 +230,10 @@ game_over_loop:
 	blo game_over_loop
 	bl timer_stop
 	b  main_while 	
-	
-timer_1s_adrrvv:
-	.word 	timer_1s
 
 new_point_led_addr:
 	.word 	new_point_led
 	
-score_addr:
-	.word 	score
 	
 ; incrementa score e apresenta indicador de ponto
 one_second_pass:
@@ -253,33 +248,27 @@ one_second_pass:
 	pop pc
 	
 	
-timer_level_adrr:
-	.word timer_level
-
-timer_1s_adrr:
-	.word 	timer_1s	
-	
-	
 ; set led new point to the valu of r0	
 set_led_newpoint:
 	push lr
-	ldr r1, new_point_led_addrbbb
+	ldr r1, new_point_led_addr_ext
 	strb r0, [r1]
 	mov r1,r0
 	mov r0, NEW_POINT_LED_MASK
 	bl	outport_write_bits
 	pop pc
 	
-new_point_led_addrbbb:
+new_point_led_addr_ext:
 		.word	new_point_led
 
 
 ;-------------------------------------------------------------------------
 ; Funções relacionadas com a bola
+;-------------------------------------------------------------------------
 
 set_ball_leds:
 	push lr	
-	ldr	r1, ball_pos_addrb
+	ldr	r1, ball_pos_addr_ext1
 	ldrb r1, [r1]
 	mov r0, BALL_LEDS_MASK
 	bl	outport_write_bits	
@@ -287,7 +276,7 @@ set_ball_leds:
 
 invert_dir:
 	push lr
-	ldr r0, direction_addr
+	ldr r0, direction_addr_ext
 	ldrb r1, [r0]
 	mov r2, 1
 	eor r1, r1, r2
@@ -295,66 +284,69 @@ invert_dir:
 	pop pc
 
 get_direction:
-	ldr r0, direction_addr
+	ldr r0, direction_addr_ext
 	ldrb r0, [r0]
 	mov pc, lr
 
 get_ball_position:
-	ldr r0, ball_pos_addrb
+	ldr r0, ball_pos_addr_ext1
 	ldrb r0, [r0]
 	mov pc, lr
 
-ball_pos_addrb:
+ball_pos_addr_ext1:
 	.word 	ball_pos
 
-direction_addr:
+direction_addr_ext:
 	.word	direction
 
 ;-------------------------------------------------------------------------
 ; Funções relacionadas com timers
+;-------------------------------------------------------------------------
 
 init_timer_1s:
 	push lr
 	bl sysclk_get_value	
-	ldr r1, timer_1s_adrrb
+	ldr r1, timer_1s_addr
 	str r0, [r1]	
 	pop pc
 
 get_timer_1s:
-	ldr r0, timer_1s_adrrb
+	ldr r0, timer_1s_addr
 	ldr r0, [r0]
 	mov pc, lr
 	
-timer_1s_adrrb:
+timer_1s_addr:
 	.word 	timer_1s
 
 
 init_timer_5s:
 	push lr
 	bl sysclk_get_value	
-	ldr r1, timer_5s_adrrb
+	ldr r1, timer_5s_addr
 	str r0, [r1]	
 	pop pc
 
 get_timer_5s:
-	ldr r0, timer_5s_adrrb
+	ldr r0, timer_5s_addr
 	ldr r0, [r0]
 	mov pc, lr
 	
-timer_5s_adrrb:
+timer_5s_addr:
 	.word 	timer_5s
+	
 ;-------------------------------------------------------------------------
 ; Funções relacionadas com nivel
+;-------------------------------------------------------------------------
 
 init_timer_lvl:
 	push lr
 	bl sysclk_get_value	
-	ldr r1, timer_level_adrrb
+	ldr r1, timer_level_addr
 	str r0, [r1]	
 	pop pc
 
 get_timer_lvl:
-	ldr r0, timer_level_adrrb
+	ldr r0, timer_level_addr
 	ldr r0, [r0]
 	mov pc, lr
 
@@ -380,7 +372,7 @@ set_level_dif:
 	pop pc
 
 
-timer_level_adrrb:
+timer_level_addr:
 	.word timer_level
 
 lvl_list_addr:
@@ -391,27 +383,23 @@ current_lvl_addr:
 
 ;-------------------------------------------------------------------------
 ; Funções relacionadas com score
-
-ball_pos_addr:
-	.word 	ball_pos
+;-------------------------------------------------------------------------
 	
 get_score:
 	push lr
-	ldr r1, score_addr_bb
+	ldr r1, score_addr
 	ldr r0, [r1]
 	pop pc
 	
 add_score:	
 	push lr
-	ldr r0, score_addr_bb
+	ldr r0, score_addr
 	ldr r1, [r0]
 	add r1, r1, 1
 	str r1, [r0]
 	pop pc
+
 	
-	
-score_addr_bb:
-	.word score
 ;-------------------------------------------------------------------------
 ; Rotina:    mov_ball
 ; Descricao: R
@@ -438,17 +426,36 @@ mov_away:
 	lsr r0, r0,1
 	
 finish_mov:
-	ldr r1, ball_pos_addr_cc
+	ldr r1, ball_pos_addr_ext2
 	strb r0, [r1]
 	pop pc
+
 	
-	
-direction_addr_bb:
-	.word direction
-	
-ball_pos_addr_cc:
+ball_pos_addr_ext2:
 		.word ball_pos
 
+;-------------------------------------------------------------------------
+; Funcao para preparar o inicio de um novo jogo
+; Para o contador, limpa o e limpa o score
+;-------------------------------------------------------------------------
+reset_all:
+	push	lr
+	bl timer_stop
+	;timer sysclk  = 0	
+	ldr		r1, ticks_addr_ext
+	mov r0, 0
+	str		r0, [r1, #0]	
+	;score = 0
+	ldr		r1, score_addr
+	mov r0, 0
+	str		r0, [r1, #0]	
+	
+	pop		pc
+
+	
+score_addr:
+	.word	score
+	
 ;-------------------------------------------------------------------------
 ; Rotina:    isr
 ; Descricao: Rotina responsavel pelo processamento do pedido de interrupcao.
@@ -465,7 +472,7 @@ isr:
 	push	r1
 	push	r2
 	; Corpo da rotina
-	ldr		r0, ticks_addr
+	ldr		r0, ticks_addr_ext
 	ldr		r1, [r0, #0]
 	add		r1, r1, #1
 	str		r1, [r0, #0]
@@ -482,20 +489,18 @@ isr:
 	
 timer_clearInterrupt:
 	mov r0, 0
-	ldr r1, timer_addressr
+	ldr r1, timer_addr
 	strb r0, [ r1, #pTC_TIR ]
 	mov pc, lr
 	
-	
-timer_addressr:
-	.word  pTC_ADDRESS	
+
 ;-------------------------------------------------------------------------
 ;Funcao para devolver o valor corrente da variável global ticks.
 ;uint16_t sysclk_get_value ( void );
 ;	return ticks;
 ;-------------------------------------------------------------------------
 sysclk_get_value:
-	ldr		r1, ticks_addr
+	ldr		r1, ticks_addr_ext
 	ldr  	r0, [r1, #0] 	; r0 = ticks
 	mov		pc, lr
 
@@ -507,12 +512,12 @@ sysclk_get_value:
 ;}
 ;-------------------------------------------------------------------------
 sysclk_elapsed:
-	ldr	 r1, ticks_addr
+	ldr	 r1, ticks_addr_ext
 	ldr  r2, [r1, #0] 	; r0 = ticks
 	sub  r0, r2, r0
 	mov  pc,lr
 
-ticks_addr:
+ticks_addr_ext:
 	.word ticks
 	
 ;-------------------------------------------------------------------------
@@ -527,12 +532,12 @@ timer_start:
 
 
 timer_write:
-	ldr 	r2, timer_addressrc
+	ldr 	r2, timer_addr
 	add		r0, r0, r0
 	strb 	r1, [r2,r0]	
 	mov		pc,lr
 
-timer_addressrc:
+timer_addr:
 	.word  pTC_ADDRESS	
 ;-------------------------------------------------------------------------
 ;Funcao para parar a contagem no periferico. 
@@ -608,26 +613,6 @@ sw_is_pressed_1:
 sw_state_address:
 	.word	sw_state
 
-
-reset_all:
-	push	lr
-	bl timer_stop
-	;timer sysclk  = 0	
-	ldr		r1, ticks_addr_reset
-	mov r0, 0
-	str		r0, [r1, #0]	
-	
-	ldr		r1, score_addr_reset
-	mov r0, 0
-	str		r0, [r1, #0]	
-	
-	pop		pc
-	
-ticks_addr_reset:
-	.word 	ticks
-	
-score_addr_reset:
-	.word	score
 ;---------------------------------------------------------------------------------	
 ;uint16_t inport_test_bits(uint16_t pins_mask) {
 ;	return ((inport_read() & pins_mask) == pins_mask);
