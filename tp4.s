@@ -41,9 +41,9 @@
 	.equ	BALL_LEDS_MASK, 0xfe
 	.equ 	RAKET_MASK, 0x01
 	.equ 	LVL_MASK, 0xc0
-	.equ	VALU_OF_1S, 20		;0.05 * 20 = 1s
-	.equ	VALU_OF_5S, 100		;0.05 * 100 = 5s
-	.equ	VALU_OF_25, 5		;0.05 * 5 = 2.5s
+	.equ	VALUE_OF_1S, 20	;0.05 * 20 = 1s
+	.equ	VALUE_OF_5S, 100	;0.05 * 100 = 5s
+	.equ	VALUE_OF_25, 5		;0.05 * 5 = 2.5s
 
 	.equ	VARIANT_LEVEL, 3
 
@@ -96,7 +96,7 @@ SYS_init:
 	ldr		r1, [r0, #0]
 	mov		r1,  #0
 	str		r1, [r0, #0]
-	mov r0, 0x80
+	mov r0, PLAYER_MASK	;posição de inicio do jogo
 	ldr r1, ball_pos_addr_ddd
 	strb r0, [r1]
 	
@@ -148,7 +148,7 @@ game_loop:
 	bl sw_is_pressed
 	bl get_timer_1s
 	bl sysclk_elapsed
-	mov r1, VALU_OF_1S
+	mov r1, VALUE_OF_1S
 	cmp r0, r1 ;20
 	blo one_second_pass_spik
 	bl one_second_pass
@@ -161,7 +161,7 @@ one_second_pass_spik:
 	
 	bl get_timer_1s
 	bl sysclk_elapsed
-	mov r1, VALU_OF_25
+	mov r1, VALUE_OF_25
 	cmp r0, r1 ;20
 	blo	time_lvl	
 	mov r0, 0
@@ -185,10 +185,7 @@ time_lvl:
 continue_game:
 	bl get_ball_position
 	sub r0, r0, WALL_MASK
-	bzc skip_invert_dir
-	bl invert_dir
-	
-skip_invert_dir:
+	beq invert_dir
 	bl mov_ball
 	bl set_ball_leds
 	bl init_timer_lvl
@@ -212,20 +209,21 @@ level_up_skip:
 	bl set_ball_leds
 	
 	b game_loop
-	
+
+
+;apresenta do score no porto de saída durante 5 segundos
 game_over:
 	bl invert_dir
 	bl outport_clear_bits
 	bl get_score
 	bl outport_set_bits
 	bl init_timer_5s
-	mov r4, VALU_OF_5S
+	mov r4, VALUE_OF_5S
 	
-;wait 5s
 game_over_loop:
 	bl get_timer_5s
 	bl sysclk_elapsed
-	cmp r0, r4
+	cmp r0, r4			;wait 5s
 	blo game_over_loop
 	bl timer_stop
 	b  main_while 	
