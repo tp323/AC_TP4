@@ -1,6 +1,7 @@
 
 ; Autor:     Manuel Fonseca   n: 48052
-;
+; Autor:	 Manuel Henriques n: 47202
+; Autor:	 Tiago Pardal 	  n: 47206
 
 
 
