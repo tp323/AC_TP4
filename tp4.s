@@ -217,6 +217,7 @@ await_time_or_player:
 ;apresenta do score no porto de saída durante 5 segundos
 game_over:
 	bl invert_dir
+	mov r0, 0xff
 	bl outport_clear_bits
 	bl get_score
 	bl outport_set_bits
@@ -229,6 +230,8 @@ game_over_loop:
 	cmp r0, r4			;wait 5s
 	blo game_over_loop
 	bl timer_stop
+	mov r0, 0xff
+	bl outport_clear_bits
 	b  main_while 	
 
 new_point_led_addr:
