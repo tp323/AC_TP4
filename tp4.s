@@ -1,22 +1,24 @@
-; Ficheiro:  p16_extint_demo.S
-; Descricao: Programa para exemplificar o funcionamento do sistema de
-;            interrupcoes do processador P16.
-; Autor:     
-; Data:      03-01-2022
+
+; Autor:     Manuel Fonseca   n: 48052
+;
+
+
+
 
 ; Definicao dos valores dos simbolos utilizados no programa
-;
+; valores calculados para o pico timer ligado a 1khz
+
 	.equ	STACK_SIZE, 64           ; Dimensao do stack (em bytes)
 
 	.equ    INPORT_ADDRESS, 0xFF00  ; Endereço do porto de entrada da placa SDP16
 	.equ	OUTPORT_ADDRESS, 0xFF00 ; Endereço do porto de saida da placa SDP16
 
 	.equ	CPSR_BIT_I, 0x10          ; Mascara para a flag I do registo CPSR
-	.equ	PTC_VALUE, 50
-	.equ	SYSCLK_FREQ, 0x5          ; Intervalo de contagem do circuito pTC
+	.equ	PTC_VALUE, 50			; Intervalo de contagem do circuito pTC ; valores calculados para o pico timer ligado a 1khz
+	
                                         ; que suporta a implementação do sysclk
-										; fin_pTC = 10Hz fout_ptc=2Hz => T=500ms 
-										; TMR = 10Hz/2Hz = 5
+										; fin_pTC = 1kHz fout_ptc=20Hz => T=50ms 
+										
 	.equ 	LED0_MASK, 0x01
 	.equ 	OUTPORT_INIT_VALUE, 0x00
 
