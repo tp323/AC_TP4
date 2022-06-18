@@ -162,7 +162,7 @@ one_second_pass_spik:
 	bl get_timer_1s
 	bl sysclk_elapsed
 	mov r1, VALUE_OF_25
-	cmp r0, r1 ;20
+	cmp r0, r1 		;5
 	blo	time_lvl	
 	mov r0, 0
 	bl set_led_newpoint
@@ -173,41 +173,44 @@ time_lvl:
 	mov r1, r0
 	bl get_level_dif
 	cmp r1, r0
-	blo level_up_skip
+	blo await_time_or_player
 	
 	bl init_timer_lvl 
 	bl get_ball_position
 	mov r2, PLAYER_MASK
 	sub r0, r0, r2
-	bzc continue_game
+	bzc next_move_dir
 	b game_over
-	
-continue_game:
+
+; averigua direção em que a bola se deve movimentar
+next_move_dir:
 	bl get_ball_position
 	sub r0, r0, WALL_MASK
-	beq invert_dir
+	bzc continue_game
+	bl invert_dir
+	
+continue_game:
 	bl mov_ball
 	bl set_ball_leds
 	bl init_timer_lvl
-	
-level_up_skip:	
-	;ball in wall ?
-	;ball in player? 
+
+; verifica se o jogador já jogou no caso de a bola se encontrar à frente dele
+await_time_or_player:	
+	;verifica se a bola se encontra no jogador
 	bl get_ball_position
 	mov r2, PLAYER_MASK
 	sub r0, r0, r2	
 	bzc game_loop
-	;raket? 
+	
+	;verifica se butão foi premido
+	;se o jogador moveu a raquete
 	mov r0, RAKET_MASK
 	bl sw_is_pressed
 	add r0,r0,0
 	bzs  game_loop
 	
 	bl invert_dir
-	bl init_timer_lvl	
-	bl mov_ball
-	bl set_ball_leds
-	
+	bl continue_game
 	b game_loop
 
 
@@ -237,6 +240,7 @@ new_point_led_addr:
 score_addr:
 	.word 	score
 	
+; incrementa score e apresenta indicador de ponto
 one_second_pass:
 	;SCORE ++
 	;LED ON NEW POINT
@@ -270,9 +274,8 @@ new_point_led_addrbbb:
 		.word	new_point_led
 
 
-/*
-	---------------------------------------	Ball Releated Functions ---------------------------------------
-*/
+;-------------------------------------------------------------------------
+; Funções relacionadas com a bola
 
 set_ball_leds:
 	push lr	
@@ -307,9 +310,8 @@ ball_pos_addrb:
 direction_addr:
 	.word	direction
 
-/*
-	---------------------------------------	1s Timer Releated Functions ---------------------------------------
-*/
+;-------------------------------------------------------------------------
+; Funções relacionadas com timers
 
 init_timer_1s:
 	push lr
@@ -326,9 +328,6 @@ get_timer_1s:
 timer_1s_adrrb:
 	.word 	timer_1s
 
-/*
-	---------------------------------------	5s Timer Releated Functions ---------------------------------------
-*/
 
 init_timer_5s:
 	push lr
@@ -344,9 +343,8 @@ get_timer_5s:
 	
 timer_5s_adrrb:
 	.word 	timer_5s
-/*
-	---------------------------------------	Level Releated Functions ---------------------------------------
-*/
+;-------------------------------------------------------------------------
+; Funções relacionadas com nivel
 
 init_timer_lvl:
 	push lr
@@ -391,9 +389,8 @@ lvl_list_addr:
 current_lvl_addr:
 	.word current_lvl_dificult_in_time
 
-/*
-	-------------------------------------------------------------------------------------------------------
-*/
+;-------------------------------------------------------------------------
+; Funções relacionadas com score
 
 ball_pos_addr:
 	.word 	ball_pos
