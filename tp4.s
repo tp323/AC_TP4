@@ -128,6 +128,7 @@ direction_addr_cc:
 	
 main_while:
 	bl set_ball_leds
+	bl reset_all
 	
 wait_for_init_stroke:
 	mov r0, RAKET_MASK
@@ -625,6 +626,26 @@ sw_is_pressed_1:
 sw_state_address:
 	.word	sw_state
 
+
+reset_all:
+	push	lr
+	bl timer_stop
+	;timer sysclk  = 0	
+	ldr		r1, ticks_addr_reset
+	mov r0, 0
+	str		r0, [r1, #0]	
+	
+	ldr		r1, score_addr_reset
+	mov r0, 0
+	str		r0, [r1, #0]	
+	
+	pop		pc
+	
+ticks_addr_reset:
+	.word 	ticks
+	
+score_addr_reset:
+	.word	score
 ;---------------------------------------------------------------------------------	
 ;uint16_t inport_test_bits(uint16_t pins_mask) {
 ;	return ((inport_read() & pins_mask) == pins_mask);
