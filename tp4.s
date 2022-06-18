@@ -100,15 +100,10 @@ SYS_init:
 	ldr r1, ball_pos_addr_ddd
 	strb r0, [r1]
 	
-	
 	mov r0, PTC_VALUE
 	bl timer_init		
-	;bl timer_clearInterrupt	
-
-
 
 	mov r0, IE_MASK
-
 	msr cpsr, r0	
 	pop pc	
 	
@@ -172,10 +167,7 @@ one_second_pass_spik:
 	mov r0, 0
 	bl set_led_newpoint
 	
-
-	
 time_lvl:
-
 	bl get_timer_lvl
 	bl sysclk_elapsed
 	mov r1, r0
@@ -187,14 +179,15 @@ time_lvl:
 	bl get_ball_position
 	mov r2, PLAYER_MASK
 	sub r0, r0, r2
-	bzc game_over_skip
+	bzc continue_game
 	b game_over
-game_over_skip:
+	
+continue_game:
 	bl get_ball_position
-	;mov r2, WALL_MASK
 	sub r0, r0, WALL_MASK
 	bzc skip_invert_dir
 	bl invert_dir
+	
 skip_invert_dir:
 	bl mov_ball
 	bl set_ball_leds
@@ -202,10 +195,6 @@ skip_invert_dir:
 	
 level_up_skip:	
 	;ball in wall ?
-
-	;bl mov_ball
-	;bl set_ball_leds
-
 	;ball in player? 
 	bl get_ball_position
 	mov r2, PLAYER_MASK
@@ -234,7 +223,6 @@ game_over:
 	
 ;wait 5s
 game_over_loop:
-	;push lr
 	bl get_timer_5s
 	bl sysclk_elapsed
 	cmp r0, r4
@@ -262,11 +250,10 @@ one_second_pass:
 	bl add_score
 	pop pc
 	
+	
 timer_level_adrr:
 	.word timer_level
 
-
-	
 timer_1s_adrr:
 	.word 	timer_1s	
 	
@@ -284,7 +271,6 @@ set_led_newpoint:
 new_point_led_addrbbb:
 		.word	new_point_led
 
-	
 
 /*
 	---------------------------------------	Ball Releated Functions ---------------------------------------
@@ -397,6 +383,7 @@ set_level_dif:
 	strb r0, [r1]
 	pop pc
 
+
 timer_level_adrrb:
 	.word timer_level
 
@@ -426,7 +413,7 @@ add_score:
 	add r1, r1, 1
 	str r1, [r0]
 	pop pc
-;	mov pc, lr
+	
 	
 score_addr_bb:
 	.word score
@@ -458,7 +445,6 @@ mov_away:
 finish_mov:
 	ldr r1, ball_pos_addr_cc
 	strb r0, [r1]
-	
 	pop pc
 	
 	
@@ -489,24 +475,22 @@ isr:
 	add		r1, r1, #1
 	str		r1, [r0, #0]
 	; clear Interrupt Request
-	;bl 	timer_clearInterrupt
 	mov r1, 0xFF
 	ldr  r0, ptc_addr
 	strb r1, [ r0, #pTC_TIR ]
-	;bl timer_write	
 	; Epilogo
 	pop		r2
 	pop		r1
 	pop		r0
 	movs	pc, lr
 	
-
 	
 timer_clearInterrupt:
 	mov r0, 0
 	ldr r1, timer_addressr
 	strb r0, [ r1, #pTC_TIR ]
 	mov pc, lr
+	
 	
 timer_addressr:
 	.word  pTC_ADDRESS	
@@ -691,19 +675,6 @@ end_inport_test_bit:
 inport_read:
 	ldr		r0, inport_address_local
 	ldrb	r0, [r0, #0]
-	mov		pc, lr
-
-;---------------------------------------------------------------------------------	
-; Rotina:    inport_read_with_mask
-; Descricao: Devolve o valor corrente do estado dos pinos do porto de entrada, em função da mascara passada
-; Entradas:  
-; Saidas:    Valor corrente do porto de entrada para a mascara
-; Efeitos:   
-;---------------------------------------------------------------------------------
-inport_read_with_mask:
-	ldr		r1, inport_address_local
-	ldrb	r1, [r1, #0]
-	and		r0, r0, r1
 	mov		pc, lr
 
 inport_address_local:
