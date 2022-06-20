@@ -473,7 +473,6 @@ isr:
 	; Prologo
 	push	r0
 	push	r1
-	push	r2
 	; Corpo da rotina
 	ldr		r0, ticks_addr_ext
 	ldr		r1, [r0, #0]
@@ -484,7 +483,6 @@ isr:
 	ldr  r0, ptc_addr
 	strb r1, [ r0, #pTC_TIR ]
 	; Epilogo
-	pop		r2
 	pop		r1
 	pop		r0
 	movs	pc, lr
