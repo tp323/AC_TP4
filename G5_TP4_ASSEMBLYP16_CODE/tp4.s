@@ -91,7 +91,7 @@ isr_addr:
 SYS_init:
 	push lr
 	bl outport_init		
-	bl timer_stop
+	;bl timer_stop
 	ldr		r0, ticks_addr
 	ldr		r1, [r0, #0]
 	mov		r1,  #0
@@ -115,7 +115,7 @@ ticks_addr:
 
 main:
 	push lr	
-	bl timer_stop
+	;bl timer_stop
 	ldr r0, direction_addr
 	mov r1, 0
 	strb r1, [r0]
@@ -210,7 +210,7 @@ await_time_or_player:
 	bzs  game_loop
 	
 	bl invert_dir
-	bl continue_game
+	b continue_game
 	b game_loop
 
 
@@ -229,7 +229,7 @@ game_over_loop:
 	bl sysclk_elapsed
 	cmp r0, r4			;wait 5s
 	blo game_over_loop
-	bl timer_stop
+	;bl timer_stop
 	mov r0, 0xff
 	bl outport_clear_bits
 	b  main_while 	
@@ -443,7 +443,7 @@ ball_pos_addr_ext2:
 ;-------------------------------------------------------------------------
 reset_all:
 	push	lr
-	bl timer_stop
+	;bl timer_stop
 	;timer sysclk  = 0	
 	ldr		r1, ticks_addr_ext
 	mov r0, 0
